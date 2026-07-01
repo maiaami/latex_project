@@ -1,0 +1,155 @@
+\documentclass[dvipdfmx]{jsarticle}
+\usepackage[a4paper, top=20truemm, bottom=20truemm, left=20truemm, right=20truemm]{geometry}
+\usepackage{amsmath, amssymb, amsfonts, ascmac, ulem, mathtools, mathrsfs, bm, amsbsy, amsthm, latexsym, bbm}
+\usepackage{euscript, enumerate, longtable, arydshln, framed, multirow, fancybox, physics}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[dvipdfmx, unicode=true, colorlinks=true, linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage{cleveref, autonum}
+\usepackage{float} % プリアンブルで必要
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18} % 最新のバージョンを使用することを推奨
+\usepackage{subcaption}
+
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usetikzlibrary{calc}
+\tcbuselibrary{raster,skins,breakable,theorems}
+
+%\setcounter{section}{+1}
+%\setcounter{subsection}{+1}
+%\setcounter{subsubsection}{+1}
+\numberwithin{equation}{section}
+
+\theoremstyle{definition}
+\newtheorem{thm}{定理}[section]
+\newtheorem{lem}[thm]{補題}
+\newtheorem{prop}[thm]{命題}
+\newtheorem{cor}[thm]{系}
+\newtheorem{ass}[thm]{仮定}
+\newtheorem{conj}[thm]{予想}
+\newtheorem{dfn}[thm]{定義}
+\newtheorem*{rem*}{注意}
+\newtheorem{ex}[thm]{例}
+\newtheorem{que}[thm]{問}
+\newtheorem*{fact*}{事実}
+\newtheorem*{apd*}{補足}
+
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+  \pushQED{\qed}%
+  \normalfont \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item\relax
+  {\bfseries
+  #1\@addpunct{.}}\hspace\labelsep\ignorespaces
+}{%
+  \popQED\endtrivlist\@endpefalse
+}
+\makeatother
+\renewcommand{\proofname}{証明}
+
+\newcommand{\ctext}[1]{\raise0.2ex\hbox{\textcircled{\scriptsize{#1}}}}
+\newcommand{\no}{\noindent}
+\let\d\relax
+\newcommand{\d}{\displaystyle}
+%\newcommand{\pmat}[1]{\begin{pmatrix} #1 \end{pmatrix}}
+\DeclareMathOperator{\id}{id}
+\let\ker\relax
+\DeclareMathOperator{\ker}{Ker}
+\let\Im\relax
+\DeclareMathOperator{\im}{Im}
+\let\Re\relax
+\DeclareMathOperator{\re}{Re}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\let\P\relax
+\newcommand{\P}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\F}{\mathcal{F}}
+\let\u\relax
+\newcommand{\u}{\bm{u}}
+\let\v\relax
+\newcommand{\v}{\bm{v}}
+\newcommand{\p}{\bm{p}}
+\newcommand{\bpi}{\bm{\pi}}
+\newcommand{\bphi}{\bm{\phi}}
+\newcommand{\e}{\varepsilon}
+\newcommand{\ind}{\mathbbm{1}}
+\newcommand{\0}{\bm{0}}
+\newcommand{\1}{\bm{1}}
+\newcommand{\dt}{\Delta t}
+
+\newcommand{\cbecause}{\ctext{$\because$}}
+\newcommand{\Llr}{\Longleftrightarrow}
+\newcommand{\Lr}{\Longrightarrow}
+\newcommand{\lr}{\longrightarrow}
+\newcommand{\mvert}{\:\middle\vert\:}
+\newcommand{\st}{\text{ s.t. }}
+\newcommand{\ie}{\text{ i.e., }}
+
+\title{\bf 大数の弱法則}
+\author{北海道大学　理学部数学科 \\ 奥田　健}
+\date{}
+
+\begin{document}
+
+
+\maketitle{}
+
+\newpage
+
+\section{はじめに}
+% 先ほど作成した、大数の弱法則から中心極限定理への繋がりを述べた序文をここに配置します。
+
+\section{必要事項（準備）}
+
+\subsection{確率空間}
+% 確率空間 $(\Omega, \mathcal{F}, P)$、確率変数、期待値、分散の厳密な定義を記述します。
+% 合わせて、後半の「最も条件の緩い弱法則」を見据えて、「確率収束」の定義もここに書いておくと非常にスムーズです。
+
+\subsection{Markovの不等式}
+% ※論理の流れとして、Markovの不等式を先に示し、それを応用してChebyshevの不等式を導出するのが自然で美しいです。
+% 非負値確率変数に対して P(X \ge a) \le E[X]/a を示します。
+
+
+\subsection{Chebyshevの不等式}
+% Markovの不等式において、X を |X - \mu|^2 に置き換えることで直ちに導けることを記述します。
+% この不等式が、次の章のL_2弱法則の証明において直接の武器になります。
+$\inf\{\phi(y) : y \in \mathbf{B}\} \leq E$
+
+\begin{thm}
+   
+\end{thm}
+
+\section{\texorpdfstring{$L_2$}{L2}弱法則}
+
+\subsection{無相関な確率変数列の和の分散}
+% 「無相関であれば和の分散は分散の和に等しい」という、独立性よりも少し緩い条件（無相関性）で成り立つ性質を示します。
+% $V[\sum X_i] = \sum V[X_i] + 2\sum_{i<j} Cov(X_i, X_j)$ を展開し、共分散（Covariance）が0になることを1行ずつ丁寧に数式で変形します。
+
+\subsection{定理の証明}
+% 標本平均 $\bar{X}_n = \frac{1}{n}\sum X_i$ の期待値と分散を計算し、Chebyshevの不等式に放り込むことで、
+% 確率が 0 に収束（すなわち $L^2$ の意味でも確率の意味でも平均へ収束）することを示します。
+
+\subsection{使用例：Bernstein多項式への応用}
+% 大数の弱法則を用いて、閉区間上の任意の連続関数が多項式によって一様近似できること（Weierstrassの近似定理）を示します。
+% 確率変数としてコイン投げ（二項分布）をうまく設定することで、大数の法則が近似定理の証明に直結する鮮やかな一例です。
+
+
+\section{三角配列に対する弱法則}
+% 各行ごとに確率変数の数が変わる「三角配列（Triangular array）」$X_{n,k}$ に対する弱法則を定式化します。
+% これは、次に控える「同分布とは限らない場合」や、将来的に学びたいとおっしゃっていた「中心極限定理（Lindebergの条件など）」の土台となる重要なステップです。
+
+
+\section{最も条件の緩い弱法則}
+% 分散の有限性（$L^2$）を仮定せず、期待値の有限性（$L^1$）だけで成り立つ「ヒンチンの大数の弱法則（Khinchin's weak law）」を扱います。
+% 切り捨て（Truncation）の技法を使って、分散が無限大になる成分をうまくコントロールしながら、
+% 前章の「三角配列に対する弱法則」に帰着させて証明を完結させます。これで7〜10頁の最高潮（クライマックス）を迎えます。
+
+
+\end{document}

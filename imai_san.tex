@@ -1,0 +1,561 @@
+\documentclass[dvipdfmx]{jsarticle}
+\usepackage[a4paper, top=20truemm, bottom=20truemm, left=20truemm, right=20truemm]{geometry}
+\usepackage{amsmath, amssymb, amsfonts, ascmac, ulem, mathtools, mathrsfs, bm, amsbsy, amsthm, latexsym, bbm}
+\usepackage{euscript, enumerate, longtable, arydshln, framed, multirow, fancybox, physics}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[dvipdfmx, unicode=true, colorlinks=true, linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage{cleveref, autonum}
+
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usetikzlibrary{calc}
+\tcbuselibrary{raster,skins,breakable,theorems}
+
+%\setcounter{section}{+1}
+%\setcounter{subsection}{+1}
+%\setcounter{subsubsection}{+1}
+\numberwithin{equation}{section}
+
+\theoremstyle{definition}
+\newtheorem{thm}{定理}[section]
+\newtheorem{lem}[thm]{補題}
+\newtheorem{prop}[thm]{命題}
+\newtheorem{cor}[thm]{系}
+\newtheorem{ass}[thm]{仮定}
+\newtheorem{conj}[thm]{予想}
+\newtheorem{dfn}[thm]{定義}
+\newtheorem*{rem*}{注意}
+\newtheorem{ex}[thm]{例}
+\newtheorem{que}[thm]{問}
+\newtheorem*{fact*}{事実}
+\newtheorem*{apd*}{補足}
+
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+  \pushQED{\qed}%
+  \normalfont \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item\relax
+  {\bfseries
+  #1\@addpunct{.}}\hspace\labelsep\ignorespaces
+}{%
+  \popQED\endtrivlist\@endpefalse
+}
+\makeatother
+\renewcommand{\proofname}{証明}
+
+\newcommand{\ctext}[1]{\raise0.2ex\hbox{\textcircled{\scriptsize{#1}}}}
+\newcommand{\no}{\noindent}
+\let\d\relax
+\newcommand{\d}{\displaystyle}
+%\newcommand{\pmat}[1]{\begin{pmatrix} #1 \end{pmatrix}}
+\DeclareMathOperator{\id}{id}
+\let\ker\relax
+\DeclareMathOperator{\ker}{Ker}
+\let\Im\relax
+\DeclareMathOperator{\im}{Im}
+\let\Re\relax
+\DeclareMathOperator{\re}{Re}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\let\P\relax
+\newcommand{\P}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\F}{\mathcal{F}}
+\let\u\relax
+\newcommand{\u}{\bm{u}}
+\let\v\relax
+\newcommand{\v}{\bm{v}}
+\newcommand{\p}{\bm{p}}
+\newcommand{\bpi}{\bm{\pi}}
+\newcommand{\bphi}{\bm{\phi}}
+\newcommand{\e}{\varepsilon}
+\newcommand{\ind}{\mathbbm{1}}
+\newcommand{\0}{\bm{0}}
+\newcommand{\1}{\bm{1}}
+\newcommand{\dt}{\Delta t}
+
+\newcommand{\cbecause}{\ctext{$\because$}}
+\newcommand{\Llr}{\Longleftrightarrow}
+\newcommand{\Lr}{\Longrightarrow}
+\newcommand{\lr}{\longrightarrow}
+\newcommand{\mvert}{\:\middle\vert\:}
+\newcommand{\st}{\text{ s.t. }}
+\newcommand{\ie}{\text{ i.e., }}
+
+\title{\bf 出生死亡過程における定常分布と絶滅確率}
+\author{北海道大学　理学部数学科 \\ 今井　柚希}
+\date{}
+
+\begin{document}
+\maketitle{}
+
+\newpage
+
+\section{はじめに}
+Markov連鎖は，最も重要な確率過程の一つである．本レポートでは，有名なMarkov連鎖の一つである「出生死亡過程」について論じる．これを用いることで，あるサービスの待ち行列や，ある個体群における個体数，ある感染症の感染者数など，さまざまな問題のモデルを考えることができる．ただし本レポートでは，最もシンプルな場合である，時間斉次性があり，出生率や死亡率がランダムでないモデルを考える．
+
+今回は特に「定常分布」と「絶滅確率」に焦点を当てた．まずは定常分布の存在条件について述べる．次に絶滅確率が1となるか否かの条件について述べる．また絶滅確率を直接求める，確率母関数を用いた偏微分方程式的な方法を紹介する．
+
+出生死亡過程の代表的な応用例もいくつか紹介し，これらの定常分布や絶滅確率についての条件が示唆することを直感的に理解できるように試みた．
+
+\section{準備}
+まずは，Markov連鎖についての基本的な事項をまとめておく．
+
+\subsection{離散時間Markov連鎖}
+ここでは$S := \{0,1,2, \cdots \}$上に値をとる離散時間の確率過程$\{X_n \mid n \in \N_0\}$を考える．ただし，$\N_0 := \{0,1,2, \cdots \}$である．$S$を{\bf 状態空間}(state space)，$S$の元を{\bf 状態}(state)と呼ぶ．今後$\{X_n \mid n \in \N_0\}$は，$\{X_n\}$や単に$X_n$と書く．
+
+\begin{dfn}
+  確率過程$X_n$が{\bf （離散時間）Markov連鎖}(discrete-time Markov chain)であるとは，次の{\bf Markov性}を満たすことをいう：$\forall n \in \N_0, \; \forall i_0, i_1, \cdots, i_{n-1}, i, j \in S,$
+  \begin{gather}
+    \P( \{X_{n+1} = j\} \mid \bigcap_{k=0}^{n-1} \{X_k = i_k\} \cap \{X_n = i\} ) = \P( \{X_{n+1} = j\} \mid \{X_n = i\} ).
+  \end{gather}
+\end{dfn}
+
+これは，将来のふるまいを予測するには，過去の情報はまったく関係なく，直近の情報にしか依らないということを言っている．
+
+\begin{dfn}
+  上のMarkov性に加えて，次の性質を満たすMarkov連鎖を{\bf 時間斉次なMarkov連鎖}(time-homogeneous Markov chain)という：$\forall n, k \in \N_0 \; (n \geqq k), \; \forall i, j \in S,$
+  \begin{align}
+    \P( \{X_n = j\} \mid \{X_k = i\} ) = \P( \{X_{n-k} = j\} \mid \{X_0 = i\} ).
+  \end{align}
+\end{dfn}
+
+本レポートでは，特に断らない限りMarkov連鎖と言ったら時間斉次なものを考えるとする．
+
+\begin{dfn}
+  $i,j \in S$に対して$p_{i,j}(n) := \P( \{X_n = j\} \mid \{X_0 = i\} )$をMarkov連鎖の{\bf 推移確率}(transition probability)と呼ぶ．$p_{i,j} := p_{i,j}(1)$と書く．
+  
+  また，第$i,j$成分が推移確率$p_{i,j}$であるような確率行列$P$をMarkov連鎖の{\bf 推移行列}(transition matrix)と呼ぶ．ただし，行列$P = (p_{ij})$が{\bf 確率行列}(stochastic matrix)であるとは
+  \begin{align}
+    0 \leqq p_{ij} \leqq 1 ~~~~ (\forall i,j \in S), && \sum_{j \in S} p_{ij} = 1 ~~~~ (\forall i \in S)
+  \end{align}
+  が成り立つことをいう．
+\end{dfn}
+
+\subsection{連続時間Markov連鎖}
+次に$S = \{0,1,2, \cdots \}$上に値をとる``連続時間"の確率過程$\{X_t \mid t \in [0, \infty) \}$を考える．
+
+\begin{dfn}
+  連続時間の確率過程$X_t$に対するMarkov性を次で定義する：$\forall s_0, s_1, \cdots, s_n, s, t \in (0, t] \; (0 \leqq s_0 < s_1 < \cdots < s_n < s), \; i_0, i_1, \cdots, i_n, i, j \in S,$
+  \begin{align}
+    \P( \{X_{s+t} = j\} \mid \bigcap_{k=0}^n \{X_{s_k} = i_k\} \cap \{X_s = i\}) = \P(\{X_{s+t} = j\} \mid \{X_s = i\} ).
+  \end{align}
+
+  また，時間斉次性を次で定義する：$\forall s, t \in (0, \infty] \; (s \leqq t), \; \forall i, j \in S,$
+  \begin{align}
+    \P( \{X_t = j\} \mid \{X_s = i\} ) = \P( \{X_{t-s} = j \mid \{X_0 = i\} ).
+  \end{align}
+
+  ここで，チェーンが状態$i$にいるとき，各状態$j \; (\ne i)$に対して，チェーンが$j$に移動する比率$\alpha(i, j) \geqq 0$が割り当てられているとする．また
+  \begin{align}\label{eq: def-jump rate}
+    \alpha(i) := \sum_{j \ne i} \alpha(i, j)
+  \end{align}
+  とする．このとき，Markov性と斉次性に加えて，十分小さい時間$\dt$に対して
+  \begin{gather}
+    \P( \{X_{t + \dt} = j\} \mid \{X_t = i\} ) = \alpha(i, j) \dt + o(\dt), \label{eq: def-contimc-ij} \\
+    \P( \{X_{t + \dt} = i\} \mid \{X_t = i\} ) = 1 - \alpha(i) \dt + o(\dt) \label{eq: def-contimc-ii}
+  \end{gather}
+  を満たすMarkov連鎖を{\bf レート$\alpha$をもつ（連続時間）Markov連鎖}と呼ぶ．
+\end{dfn}
+
+\eqref{eq: def-contimc-ij}は，微小時間$\dt$の間にチェーンが$i$から$j$へ移る確率が約$\alpha(i,j) \dt$であるということを言っている．また，$\alpha(i)$は$i$からどこか別の状態に移る比率を表すので，\eqref{eq: def-contimc-ii}は，微小時間$\dt$の間チェーンが$i$に留まっている確率が約$1 - \alpha(i) \dt$であるということを言っている．
+
+\paragraph{\fbox{推移率}} 離散時間の場合と同様に，推移確率を$p_{i,j}(t) := \P( \{X_t = j\} \mid \{X_0 = i\} )$，推移行列を$P_t := ( p_{i,j}(t) )$で定義する．$p_{i,j}(0) = \delta_{ij}, ~ P_0 = I$に注意する．斉次性と\eqref{eq: def-contimc-ij}から，$i \ne j$に対して
+\begin{align}
+  p_{i,j}'(0) = \lim_{\dt \to 0} \frac{p_{i,j}(\dt) - p_{i,j}(0)}{\dt} 
+  = \lim_{\dt \to 0} \frac{\P( \{X_{t + \dt} = j\} \mid \{X_t = i\} )}{\dt} 
+  = \lim_{\dt \to 0} \frac{\alpha(i,j) \dt + o(\dt)}{\dt} = \alpha(i,j)
+\end{align}
+が成り立つ．つまり，$p_{i,j}(t)$の$t = 0$における微分係数は$\alpha(i,j)$に等しい．これは，状態$i$から次の瞬間に状態$j$へ移る比率が$\alpha(i,j)$であることを意味している．このことから$\alpha(i,j)$は{\bf 推移率}(jump rate)と呼ばれる．
+
+\begin{dfn}
+  連続時間のMarkov連鎖$X_t$に対して，$k$回目のジャンプが起こるまでの時間を$T_k$とすると，離散時間のMarkov連鎖$Y_n := X_{T_n}$を考えることができる．この$Y_n$を$X_t$の{\bf 隠れMarkov連鎖}(embedded Markov chain)と呼ぶ．$Y_n$の推移確率$q$は
+  \begin{align}
+    q(i,j) = \frac{\alpha(i,j)}{\sum_{j \ne i} \alpha(i,j)} ~~~~ (j \ne i), && q(i,i) = 0
+  \end{align}
+  で与えられる．
+\end{dfn}
+
+\paragraph{\fbox{生成作用素}} 次に，$p_i(t):=\P(\{X_t=i\})$を考える．
+\begin{align}
+  p_i(t + \dt) &= \P( \{X_{t + \dt} = i\} \mid \{X_t = i\} ) \P( \{X_t = i\} ) + \sum_{j \ne i} \P( \{X_{t + \dt} = i\} \mid \{X_t = j\} ) \P( \{X_t=j\} ) \\
+  &= (1 - \alpha(i,j) \dt) p_i(t) + \sum_{j \ne i} (\alpha(j,i) \dt) p_j(t) + o(\dt)
+\end{align}
+より
+\begin{align}
+  p_i'(t) &= \lim_{\dt \to 0} \frac{p_i(t + \dt) - p_i(t)}{\dt} = \lim_{\dt \to 0} \frac{-\alpha(i,j) p_i(t) \dt + \sum_{j \ne i} \alpha(j,i) p_j(t) \dt + o(\dt)}{\dt} \\
+  &= -\alpha(i) p_i(t) + \sum_{j \ne i} \alpha(j,i) p_j(t) \label{eq: generator-pde}
+\end{align}
+が得られる．よって
+\begin{align}
+  A = (a_{ij})_{i,j \in S}, ~~~~ a_{ij} := \begin{cases}
+    -\alpha(i), & i=j, \\ 
+    \alpha(i,j), & i \ne j, 
+  \end{cases} && 
+  \p(t) := (p_0(t), p_1(t), p_2(t), \cdots)
+\end{align}
+とすれば\eqref{eq: generator-pde}は$\p'(t) = \p(t)A$と書けて，これより$\p(t) = \p(0) e^{tA}$が得られる．この$A$をMarkov連鎖$X_t$の{\bf 生成作用素}(infinitesimal generator)と呼ぶ．\eqref{eq: def-jump rate}から$A$の各行の和は0，つまり$\sum_{j} a_{ij} = 0$であることに注意する．さらに，詳しい計算は煩雑になるので省略するが
+\begin{gather}
+  p_{i,j}'(t) = \lim_{\dt \to 0} \frac{p_{i,j}(t + \dt) - p_{i,j}(t)}{\dt} = -\alpha(j) p_{i,j}(t) + \sum_{k \ne j} \alpha(k,j) p_{i,k}(t), \\
+  P_t' = P_t A, ~~~~~~ P_0=I
+\end{gather}
+が成り立つ．したがって$P_t = e^{tA}$がわかる．これより$AP_t=P_tA$であることに注意する．
+
+\begin{dfn}
+  確率分布$\bm{\pi}$がMarkov連鎖$X_t$の{\bf 定常分布}(stationary distribution)であるとは
+  \begin{align}
+    \forall t \geqq 0, ~~~~ \bm{\pi} P_t = \bm{\pi}
+  \end{align}  
+  が成り立つことである．
+\end{dfn}
+
+つまり，チェーンがひとたび分布$\bpi$にたどり着いたら，その後はそこから動かないということを言っている．
+
+\begin{thm}
+  $\bm{\pi} P_t=\bm{\pi}\Llr\bm{\pi}A=\0$が成り立つ．
+\end{thm}
+
+\begin{proof}
+  $\Lr$：$\d \bm{\pi} A = \bm{\pi} P_t A = \bm{\pi} P_t' = (\bm{\pi} P_t)' = \bm{\pi}' = \0$．
+  
+  $\Longleftarrow$：$(\bm{\pi} P_t)' = \bm{\pi} P_t' = \bm{\pi} P_t A = \bm{\pi} A P_t = \0 P_t = \0$より$\bm{\pi} P_t$は$t$に依らない．$P_0 = I$と合わせると$\bm{\pi} P_t = \bm{\pi}$が従う．
+\end{proof}
+
+\paragraph{\fbox{母関数の方法}} $X_t$の確率母関数(probability generating function)とモーメント母関数(moment generating function)をそれぞれ
+\begin{align}
+  P(z,t) = \sum_{j=0}^{\infty} p_j(t) z^j, && 
+  M(\theta, t) = P(e^{\theta}, t) = \sum_{j=0}^{\infty} p_j(t) e^{j \theta}
+\end{align}
+で表す．これらの母関数の定義域について，$t$の定義域は$[0, \infty)$であり，$z$や$\theta$は級数が絶対収束する範囲で考えるものとする．例えば$|z|<1$では絶対収束する．このとき
+\begin{align}
+  p_j'(t)=\sum_{i=0}^{\infty}p_i(t)a_{ij}  
+\end{align}
+の両辺に$z^j$をかけて$j$について和をとり，和の順序を入れ替えると
+\begin{gather}\label{eq: gfmethod}
+  \pdv{P(z,t)}{t} = \sum_{j=0}^{\infty} p_j'(t) z^j = \sum_{j=0}^{\infty} \qty(\sum_{i=0}^{\infty} p_i(t) a_{ij}) z^j = \sum_{i=0}^{\infty} \qty(\sum_{j=0}^{\infty} p_i(t) a_{ij} z^j)
+\end{gather}
+が得られる．詳しくは後の節で述べる．
+
+\section{出生死亡過程}
+\begin{dfn}
+  以下のようなレートをもつ$S = \{0,1,2, \cdots \}$上のMarkov連鎖 $X_t$を{\bf 出生死亡過程}(Birth-and-Death Process)という：$i \ne j \in S$に対して
+  \begin{align}
+    \alpha(i,j) = \begin{cases} 
+      \; \lambda_i, & j = i+1, \\ 
+      \; \mu_i, & j = i-1, \\
+      \; 0, & \text{otherwise}
+    \end{cases}.
+  \end{align}
+  つまり
+  \begin{gather}
+    \P( \{X_{t + \dt} = i+1\} \mid \{X_t = i\} ) = \lambda_i \dt + o(\dt), \label{eq: def-bdp-i+1} \\
+    \P( \{X_{t + \dt} = i-1\} \mid \{X_t = i\} ) = \mu_i \dt + o(\dt), \label{eq: def-bdp-i-1} \\
+    \P( \{X_{t + \dt} = i\} \mid \{X_t = i\} ) = 1 - (\lambda_i + \mu_i) \dt + o(\dt), \label{eq: def-bdp-ii} \\
+    \P( \{|X_{t + \dt} - X_t| \geqq 2\} \mid \{X_t = i\} ) = o(\dt). \label{eq: def-bdp-i2}
+  \end{gather}
+\end{dfn}
+
+今，状態$i\in S$を「個体数」と考える．このとき\eqref{eq: def-bdp-i+1}, \eqref{eq: def-bdp-i-1}, \eqref{eq: def-bdp-ii}, \eqref{eq: def-bdp-i2}は，このチェーンはレート$\lambda_i \; (i = 0,1,2, \cdots)$による“出生(birth)”とレート$\mu_i \; (i = 1,2, \cdots)$による“死亡(death)”によって1ずつ状態が推移するということを言っている．このことから$\lambda_i$を{\bf 出生率}(birth rate)，$\mu_i$を{\bf 死亡率}(death rate)と呼ぶ．つまり，現在の個体数が$i$のとき，$\lambda_i$のレートで個体が1増え，$\mu_i$のレートで個体が1減る（$S = \{0,1,2, \cdots\}$上で考えているので$\mu_0 = 0$とする）．\\
+
+出生死滅過程$X_t$の生成作用素$A$は
+\begin{align}
+  A = \mqty(
+    -\lambda_0 & \lambda_0 & 0 & 0 & \cdots \\
+    \mu_1 & -(\lambda_1 + \mu_1) & \lambda_1 & 0 & \cdots \\
+    0 & \mu_2 & -(\lambda_2 + \mu_2) & \lambda_2 & \cdots \\
+    0 & 0 & \mu_3 & -(\lambda_3 + \mu_3) & \cdots \\
+    \vdots & \vdots & \vdots & \vdots & \ddots )
+\end{align}
+となる．また，\eqref{eq: generator-pde}は
+\begin{align}
+  p_0'(t) = -\lambda_0 p_0(t) + \mu_1 p_1(t), && 
+  p_i'(t) = \lambda_{i-1} p_{i-1}(t) -(\lambda_i + \mu_i) p_i(t) + \mu_{i+1} p_{i+1}(t) ~~~~ (i\geqq1)
+\end{align}
+となる．
+
+\subsection{出生死亡過程の定常分布}
+ここでは，出生死亡過程の定常分布について調べる．
+\begin{thm}
+  確率分布$\bm{\pi} = (\pi(0), \pi(1), \pi(2), \cdots)$が出生死亡過程$X_t$の定常分布であるための必要十分条件は
+  \begin{gather}\label{eq: bdp-neccsuff}
+    \sum_{i=1}^{\infty} \frac{\lambda_0 \lambda_1 \cdots \lambda_{i-1}}{\mu_1 \mu_2 \cdots \mu_i} < \infty
+  \end{gather}
+  が成り立つことである．また，このとき定常分布$\bpi$は  
+  \begin{gather}\label{eq: bdp-statdist}
+    \pi(i) = \frac{\frac{\lambda_0 \lambda_1 \cdots \lambda_{i-1}}{\mu_1 \mu_2 \cdots \mu_i}}{1 + \sum_{i=1}^{\infty} \frac{\lambda_0 \lambda_1 \cdots \lambda_{i-1}}{\mu_1 \mu_2 \cdots \mu_i}}
+  \end{gather}
+  で与えられる．
+\end{thm}
+
+\begin{proof}
+  定常分布$\bm{\pi}$は$\bm{\pi} A = \0$つまり
+  \begin{align}
+    \begin{cases}
+      0 = -\lambda_0 \pi(0) + \mu_1 \pi(1), & \\
+      0 = \lambda_{i-1} \pi(i-1) + \mu_{i+1} \pi(i+1) -(\lambda_i + \mu_i) \pi(i), & i \geqq 1
+  \end{cases}
+  \end{align}
+  を満たす．これより
+  \begin{align}
+    \mu_{i+1} \pi(i+1) -\lambda_i \pi(i) 
+    = \mu_i \pi(i) -\lambda_{i-1} \pi(i-1) 
+    = \cdots = \mu_1 \pi(1) -\lambda_0 \pi(0) = 0
+  \end{align}
+  となるので
+  \begin{align}
+    \pi(i) = \frac{\lambda_{i-1}}{\mu_i} \pi(i-1) = \cdots = \frac{\lambda_0 \lambda_1 \cdots \lambda_{i-1}}{\mu_1 \mu_2 \cdots \mu_i}\pi(0) ~~~~ (i \geqq 1)
+  \end{align}
+  を得る．$\bm{\pi}$は確率分布なので
+  \begin{align}
+    \sum_{i \in S} \pi(i) = 1
+  \end{align}
+  でなければならない．これは\eqref{eq: bdp-neccsuff}と同値である．このとき
+  \begin{align}
+    1 = \sum_{i \in S} \pi(i)
+    = \pi(0) + \sum_{i=1}^{\infty} \frac{\lambda_0 \lambda_1 \cdots \lambda_{i-1}}{\mu_1 \mu_2 \cdots \mu_i} \pi(0)
+    = \pi(0) \qty(1 + \sum_{i=1}^{\infty} \frac{\lambda_0 \lambda_1 \cdots \lambda_{i-1}}{\mu_1 \mu_2 \cdots \mu_i} )
+  \end{align}
+  より\eqref{eq: bdp-statdist}を得る．
+\end{proof}
+
+\paragraph{\fbox{待ち行列モデル(Markovian Queueing Model)}} $X_t$をあるサービス（スーパーのレジなど）に並ぶ人の数とする（サービスを受けている最中の人も含める）．
+\begin{enumerate}[(a)]
+  \item {\bf M/M/1待ち行列}：窓口が1つで待っている人が１列に並び，列の先頭にいる人がサービスを受けるとする．レート$\lambda > 0$で新たに１人が列の最後尾に並び，レート$\mu > 0$で現在のサービスが終わって列から抜けるとする．するとこれは$\lambda_i = \lambda, \; \mu_i = \mu$の出生死亡過程と考えられる．
+  \begin{align}
+    \sum_{i=1}^{\infty} \frac{\lambda_0 \lambda_1 \cdots \lambda_{i-1}}{\mu_1 \mu_2 \cdots \mu_i}
+    = \sum_{i=1}^{\infty} \qty( \frac{\lambda}{\mu} )^i
+  \end{align}
+  であり，この和は$\lambda < \mu$で収束して
+  \begin{align}
+    \sum_{i=1}^{\infty} \qty( \frac{\lambda}{\mu} )^i 
+    = \frac{\frac{\lambda}{\mu}}{1 - \frac{\lambda}{\mu}} 
+    = \frac{\lambda}{\mu - \lambda}
+  \end{align}
+  となる．よってこのとき定常分布$\bpi$は
+  \begin{align}
+    \pi(i) = \frac{\qty( \frac{\lambda}{\mu} )^i}{1 + \frac{\lambda}{\mu - \lambda}}
+    = \frac{\mu - \lambda}{\mu} \qty( \frac{\lambda}{\mu} )^i
+  \end{align}
+  で与えられる．
+  
+  \item {\bf M/M/$k$待ち行列}：今度は窓口が$k$個で待っている人は１列に並び，列の先頭にいる人が最初に空いた窓口でサービスを受けるとする．レート$\lambda > 0$で新たに１人が列の最後尾に並び，レート$\mu > 0$で現在のサービスを受けている$k$人のうちの1人が終わって列から抜けるとする．するとこれは
+  \begin{align}
+    \lambda_i=\lambda, && \mu_i = \begin{cases} 
+      i \mu, & i \leqq k, \\ 
+      k \mu, & i \geqq k
+    \end{cases}
+  \end{align}
+  出生死亡過程と考えられる．$i > k$に対して
+  \begin{align}
+    \sum_{i=1}^{\infty} \frac{\lambda_0 \lambda_1 \cdots \lambda_{i-1}}{\mu_1 \mu_2 \cdots \mu_i}
+    = \sum_{i=1}^{\infty} \frac{\lambda^i}{k! \cdot k^{i-k} \mu^i} 
+    = \frac{k^k}{k!} \sum_{i=1}^{\infty} \qty( \frac{\lambda}{k\mu} )^i
+  \end{align}
+  であり，この和は$\lambda < k \mu$で収束して
+  \begin{align}
+    \sum_{i=1}^{\infty} \qty( \frac{\lambda}{k \mu} )^i
+    = \frac{\frac{\lambda}{k \mu}}{1 - \frac{\lambda}{k \mu}}
+    = \frac{\lambda}{k \mu - \lambda}
+  \end{align}
+  となる．よってこのとき定常分布$\bpi$は
+  \begin{align}
+    \pi(i) = \frac{\frac{k^k}{k!} \qty( \frac{\lambda}{k \mu} )^i}{1 + \frac{k^k}{k!} \frac{\lambda}{k \mu - \lambda}} 
+    = \frac{k^k (k \mu - \lambda)}{k! (k \mu - \lambda) + k^k \lambda} \qty( \frac{\lambda}{k\mu} )^i
+  \end{align}
+  で与えられる．
+\end{enumerate}
+
+\subsection{出生死亡過程の絶滅確率}
+次に，出生死亡過程の絶滅確率について調べる．0が吸収状態，つまり$\lambda_0 = \mu_0 = 0$である出生死亡過程$X_t$を考える．また，$i \geqq 1$に対しては$\lambda_i, \mu_i > 0$とする．初めの個体数が$X_0 = i$であるとき，いずれこの個体が絶滅する確率
+\begin{align}
+  E_i := \lim_{t \to \infty} \P( \{X_t = 0\} \mid \{X_0 = i\} )
+  = \lim_{t \to \infty} p_0(t \mid X_0 = i)
+\end{align}
+（これを{\bf 絶滅確率}(extinction probability)と呼ぶ）を考える．これは，隠れMarkov連鎖$Y_n$を用いると
+\begin{align}
+  E_i = \lim_{n \to \infty} \P( \{Y_n = 0\} \mid \{Y_0 = i\} )
+\end{align}
+と表される．明らかに$E_0 = 1$である．
+
+\begin{thm}\label{th: extprob}
+  $X_0=m$とする．このとき，次が成り立つ：
+\begin{align}
+  & \sum_{i=1}^{\infty} \frac{\mu_1 \mu_2 \cdots \mu_i}{\lambda_1 \lambda_2 \cdots \lambda_i}
+  = \infty \Lr E_m = 1, \\
+  & \sum_{i=1}^{\infty} \frac{\mu_1 \mu_2 \cdots \mu_i}{\lambda_1 \lambda_2 \cdots \lambda_i}
+  < \infty \Lr E_m 
+  = \frac{\sum_{i=m}^{\infty} \frac{\mu_1 \mu_2 \cdots \mu_i}{\lambda_1 \lambda_2 \cdots \lambda_i}}{1 + \sum_{i=1}^{\infty} \frac{\mu_1 \mu_2 \cdots \mu_i}{\lambda_1 \lambda_2 \cdots \lambda_i}}.
+\end{align}
+\end{thm}
+
+\begin{proof}
+  まず，$\frac{dp_0(t)}{dt} = \mu_1 p_1(t) \geqq 0$であるから$p_0(t)$は単調増加である．このことと$0 \leqq p_0(t) \leqq 1$から$E_m = \lim_{t \to \infty} p_0(t)$は存在することに注意する．
+  
+  $Y_n$の推移確率$q$を考えると，$i\geqq1$に対して
+  \begin{align}
+    E_i &= E_{i-1} q(i,i-1) + E_{i+1} q(i,i+1)
+    = \frac{\mu_i}{\mu_i + \lambda_i} E_{i-1} + \frac{\lambda_i}{\mu_i + \lambda_i} E_{i+1}
+  \end{align}
+  が成り立つ．これより
+  \begin{gather}
+    E_{i+1} - E_i = \frac{\mu_i}{\lambda_i} (E_i - E_{i-1})
+    = \cdots = \frac{\mu_1 \cdots \mu_i}{\lambda_1 \cdots \lambda_i} (E_1 - E_0), \\
+    \therefore \; E_i = \sum_{j=1}^i (E_j - E_{j-1}) + E_0 
+    = \sum_{j=1}^{i-1} \frac{\mu_1 \cdots \mu_j}{\lambda_1 \cdots \lambda_j} (E_1 - E_0) + E_1 
+    = (E_1 - 1) \sum_{j=1}^{i-1} \frac{\mu_1 \cdots \mu_j}{\lambda_1 \cdots \lambda_j} + E_1 \quad (i \geqq 2) \label{eq: extprob}
+  \end{gather}
+  を得る．$0 \leqq E_i \leqq 1$であるから
+  \begin{align}
+    \sum_{i=1}^{\infty} \frac{\mu_1 \mu_2 \cdots \mu_i}{\lambda_1 \lambda_2 \cdots \lambda_i} = \infty
+  \end{align}
+  なら\eqref{eq: extprob}より$E_1 = 1$でなければならない．このとき$E_i = E_1 = 1$であるので$E_m = 1$が従う．次に
+  \begin{align}
+    \sum_{i=1}^{\infty} \frac{\mu_1 \mu_2 \cdots \mu_i}{\lambda_1 \lambda_2 \cdots \lambda_i} < \infty
+  \end{align}
+  かつ$0 < E_1 < 1$とする（$E_1 = 0$なら$E_1 < 0$となり不適，$E_1 = 1$なら上と同様に$E_i = 1$となる）．このとき\eqref{eq: extprob}から$1 > E_1 > E_2 > \cdots \geqq 0$であるので$\lim_{i \to \infty} E_i = 0$となる（詳しくは\cite{web}や\cite{Nisbet}を参照）．よって
+  \begin{align}
+    E_1 = \frac{E_i + \sum_{j=1}^{i-1} \frac{\mu_1 \cdots \mu_j}{\lambda_1 \cdots \lambda_j}}{1 + \sum_{j=1}^{i-1} \frac{\mu_1 \cdots \mu_j}{\lambda_1 \cdots \lambda_j}}
+    \xrightarrow{i \to \infty} \frac{\sum_{i=1}^{\infty} \frac{\mu_1 \cdots \mu_i}{\lambda_1 \cdots \lambda_i}}{1 + \sum_{i=1}^{\infty} \frac{\mu_1 \cdots \mu_i}{\lambda_1 \cdots \lambda_i}}
+  \end{align}
+  となるので，\eqref{eq: extprob}で$i = m$としてこれを代入すると
+  \begin{align}
+    E_m = \frac{\sum_{i=m}^{\infty} \frac{\mu_1 \mu_2 \cdots \mu_i}{\lambda_1 \lambda_2 \cdots \lambda_i}}{1 + \sum_{i=1}^{\infty} \frac{\mu_1 \mu_2 \cdots \mu_i}{\lambda_1 \lambda_2 \cdots \lambda_i}}
+  \end{align}
+  が得られる．
+\end{proof}
+
+\paragraph{\fbox{個体群のモデル(Population Model)}} $X_t$をある個体群における個体数とする．各個体は，あるレート$\lambda > 0$で子どもを産み，レート$\mu > 0$で死ぬとする．このとき$X_t$は$\lambda_i = i \lambda, \; \mu_i = i \mu \; (i = 0,1,2, \cdots)$の出生死亡過程と考えることができる．
+
+0は吸収状態であるので$\bpi = (1,0,0, \cdots)$は定常分布となる．また
+\begin{align}
+  \sum_{i=1}^{\infty} \frac{\mu_1 \mu_2 \cdots \mu_i}{\lambda_1 \lambda_2 \cdots \lambda_i}
+  = \sum_{i=1}^{\infty} \frac{i! \mu^i}{i! \lambda^i} 
+  = \sum_{i=1}^{\infty} \qty( \frac{\mu}{\lambda} )^i
+\end{align}
+であるのでこの和は$\lambda > \mu$で収束，$\lambda \leqq \mu$で発散する．定理から絶滅確率は$\lambda > \mu$のとき1より小さく，$\lambda \leqq \mu$のとき1に等しい．
+
+さて，$X_0 = m$のときの絶滅確率を考える．\cref{th: extprob}の$E_m$を使えば求められるが，ここでは母関数の方法について説明する．\eqref{eq: gfmethod}は
+\begin{align}
+  \pdv{P}{t} &= p_0'(t) + \sum_{j=1}^{\infty} p_j'(t) z^j
+  = \mu_1 p_1(t) + \sum_{j=1}^{\infty} \qty{ \lambda_{j-1} p_{j-1}(t) -(\lambda_j + \mu_j) p_j(t) + \mu_{j+1} p_{j+1}(t) } z^j \\
+  &= \mu p_1(t) + \sum_{j=1}^{\infty} \qty{ (j-1) \lambda p_{j-1}(t) - j (\lambda + \mu) p_j(t) + (j+1) \mu p_{j+1}(t) } z^j \\
+  &= \lambda \sum_{j=1}^{\infty} (j-1) p_{j-1}(t) z^j -(\lambda + \mu) \sum_{j=1}^{\infty} j p_j(t) z^j + \mu \sum_{j=0}^{\infty} (j+1) p_{j+1}(t) z^j \\  
+  &= \lambda z^2 \pdv{P}{z} -(\lambda + \mu) z \pdv{P}{z} + \mu \pdv{P}{z}
+  = (z-1)(\lambda z - \mu) \pdv{P}{z}, ~~~~~~ P(z,0) = z^m, \label{eq: pgf-pde}\\
+  \pdv{M}{t} &= (e^{\theta} - 1)(\lambda e^{\theta} - \mu) \pdv{M}{\theta} \frac{1}{\dv{e^{\theta}}{\theta}}
+  = e^{-\theta} (e^{\theta} - 1)(\lambda e^{\theta} - \mu) \pdv{M}{\theta}, ~~~~~~ M(\theta, 0) = e^{m \theta} \label{eq: mgf-pde}
+\end{align}
+と表される．\eqref{eq: pgf-pde}の偏微分方程式に対する特性曲線法により，パラメータ$\tau$を用いて
+\begin{gather}
+  \dv{t(\tau)}{\tau} = 1, ~~~~ t(0) = 0, \label{eq: chara-t}\\
+  \dv{z(\tau)}{\tau} = -(z-1)(\lambda z - \mu), ~~~~ z(0) = \exists s, \label{eq: chara-z}\\
+  \dv{P(z(\tau), t(\tau))}{\tau} = 0, ~~~~ P(z(0),t(0)) = s^m \label{eq: chara-p}
+\end{gather}
+が導かれる．\eqref{eq: chara-t}より$t(\tau) = \tau$，\eqref{eq: chara-p}より$P(z(\tau), t(\tau)) = P(s, \tau) = s^m$を得る．\eqref{eq: chara-z}については
+\begin{align}
+  \tau &= -\int \frac{1}{(z-1)(\lambda z - \mu)} \dd{z} = \begin{dcases}
+    \frac{1}{\mu - \lambda} \int \qty( \frac{1}{z-1} - \frac{1}{z - \frac{\mu}{\lambda}} ) \dd{z}
+    = \frac{1}{\mu - \lambda} \log \qty( \frac{z-1}{\lambda z - \mu}) + \exists \tau_1, & \lambda \ne \mu, \\
+    -\frac{1}{\lambda} \int \frac{1}{(z-1)^2} \dd{z}
+    = \frac{1}{\lambda(z-1)} + \exists \tau_2, & \lambda = \mu
+  \end{dcases}
+\end{align}
+であり，初期条件を考えると
+\begin{align}
+  \tau = \begin{dcases}
+    \frac{1}{\mu - \lambda} \log \frac{(z-1) (\lambda s - \mu)}{(\lambda z - \mu) (s-1)} \\
+    \frac{1}{\lambda (z-1)} - \frac{1}{\lambda(s-1)}
+  \end{dcases} && \leadsto && 
+  s = \begin{dcases}
+    \frac{e^{\tau (\mu - \lambda)} (\lambda z - \mu) - \mu (z-1)}{e^{\tau (\mu - \lambda)} (\lambda z - \mu) - \lambda (z-1)}, & \lambda \ne \mu, \\
+    \frac{1 -(\lambda \tau - 1) (z-1)}{1 -\lambda \tau (z-1)}, & \lambda = \mu
+  \end{dcases}  
+\end{align}
+が得られる．したがって
+\begin{align}
+  P(z,t) = s^m = \begin{dcases}
+    \qty( \frac{e^{t (\mu - \lambda)} (\lambda z - \mu) - \mu (z-1)}{e^{t (\mu - \lambda)} (\lambda z - \mu) - \lambda(z-1)} )^m, & \lambda \ne \mu, \\
+    \qty( \frac{1 - (\lambda t-1) (z-1)}{1 -\lambda t (z-1)} )^m, & \lambda = \mu
+  \end{dcases}
+\end{align}
+と確率母関数が求められる．\eqref{eq: mgf-pde}を同様に解くとモーメント母関数も求められる($P$に$z = e^{\theta}$を代入してもよい）．これを用いることで絶滅確率は
+\begin{align}
+  E_m = \lim_{t \to \infty} p_0(t) = \lim_{t \to \infty} P(0,t) = \begin{dcases}
+    \lim_{t \to \infty} \qty( \frac{\mu - \mu e^{t (\mu - \lambda)}}{\lambda - \lambda e^{t (\mu - \lambda)}} )^m 
+    & = \begin{dcases}
+      \qty( \frac{\mu}{\lambda} )^m, & \lambda > \mu, \\
+      1, & \lambda < \mu, 
+    \end{dcases} \\
+    \lim_{t \to \infty} \qty( \frac{\lambda t}{1 + \lambda t})^m = 1, & \lambda = \mu
+  \end{dcases}  
+\end{align}
+とわかる．
+
+\section{今後の展望}
+今回は，時間斉次で出生率や死亡率がランダムではない場合に限って論じたが，現実にはそのような世界はあり得ない．出生率や死亡率は，その時々でランダムに決まると考えるのが自然だろう．実際に，ランダムな環境下における確率過程についての理論も古くから築かれている．
+
+例えば\cite{Torrez}ではランダム媒質中の出生死亡過程について，\cite{Kawadu}では出生死亡過程ではないが，ランダム媒質中のランダムウォークについての基本的な理論が述べられている．
+
+また，最近の研究は，例えば\cite{Kaakai}では``birth--death--swap"と呼ばれる，ランダムな環境における異種の個体群に関するモデルを扱っている．これは個体数の増減に加えて，小集団間での移動(swap)が母集団内で起こるというものである．\cite{Huang}では出生死亡過程と同様に個体群のモデルとしてよく用いられる「分枝過程(Branching Process)」について，ランダムな環境における移民を伴う分岐過程に対しての，中心極限定理の収束率に関するいくつかの結果を与えている．\cite{Lovasa}ではランダム媒質中のMarkov連鎖の，待ち行列システムや機械学習のアルゴリズム，「自己回帰過程」へ応用等について述べられている．
+
+このように，「ランダム媒質中の確率過程」に関連するテーマの研究は現在も活発になされており，勉強や研究のし甲斐がある．このような対象に今後は興味がある．
+
+\begin{thebibliography}{99}
+
+  \bibitem{Allen}
+    Linda J. S. Allen.
+    \newblock An Introduction to Stochastic Processes with Applications to Biology
+    \newblock CRC Press, 2003.
+
+  \bibitem{Durrett}
+    Richard Durrett. 
+    \newblock Essentials of Stochastic Processes, Second Edition.
+    \newblock Springer, 2012.
+
+  \bibitem{Huang}
+    Xulan Huang, Yingqiu Li and Kainan Xiang.
+    \newblock Berry–Esseen bound for a supercritical branching processes with immigration in a random environment.
+    \newblock {\it Statistics and Probability Letters}, {\bf 190}, 109619, 2022.
+
+  \bibitem{Kaakai}
+    Sarah Kaakai and Nicole El Karouib.
+    \newblock Birth Death Swap population in random environment and aggregation with two timescales. 
+    \newblock {\it Stochastic Processes and their Applications}, {\bf 162}, 218--248, 2023.
+    
+  \bibitem{Lawler}
+    Gregory F. Lawler. 
+    \newblock Introduction to Stochastic Processes, Second Edition.
+    \newblock Chapman \& Hall/CRC, 2006.
+
+  \bibitem{Lovasa}
+    Attila Lovasa and Miklós Rásonyia. 
+    \newblock Markov chains in random environment with applications in queuing theory and machine learning. 
+    \newblock {\it Stochastic Processes and their Applications}, {\bf 137}, 294--326, 2021.
+
+  \bibitem{Nisbet}
+    Roger M. Nisbet and W. S. C. Gurney.
+    \newblock Modeling Fluctuating Populations.
+    \newblock Wiley, 1982.
+
+  \bibitem{Torrez}
+    William C. Torrez.
+    \newblock The Birth and Death Chain in a Random Environment: Instability and Extinction Theorems.
+    \newblock {\it The Annals of Probability}, {\bf 6}(6), 1026--1043, 1978.
+
+  \bibitem{Kawadu}
+    河津 清. 
+    \newblock ランダム媒質の中のランダムウォークと拡散過程. 
+    \newblock 数学, {\bf 48}(2), 162--183, 1996.
+
+  \bibitem{web}
+    \url{https://www.nsc.nagoya-cu.ac.jp/~noto/chap1.pdf} (閲覧日2023年7月6日).
+  
+\end{thebibliography}
+
+\end{document}
