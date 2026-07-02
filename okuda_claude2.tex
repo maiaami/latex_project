@@ -1,0 +1,454 @@
+\documentclass[dvipdfmx]{jsarticle}
+\usepackage[a4paper, top=20truemm, bottom=20truemm, left=20truemm, right=20truemm]{geometry}
+
+% --- 数式・記号系パッケージ ---
+\usepackage{amsmath, amssymb, amsfonts, amsbsy, amsthm, latexsym, bbm}
+\usepackage{mathtools} % amsmathの拡張（非常に優秀）
+\usepackage{ascmac, ulem, mathrsfs, bm}
+\usepackage{euscript, enumerate, longtable, arydshln, framed, multirow, fancybox}
+
+% 💡 physics パッケージの代わりに、よく使う便利な括弧の自動調整マクロを定義
+% (不要な場合は削除してください。 \abs{x} や \norm{x} が綺麗に使えるようになります)
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+% --- グラフィックス・配置系 ---
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{float} 
+\usepackage{subcaption}
+
+% --- グラフ・図（TikZ / tcolorbox） ---
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{calc}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{raster,skins,breakable,theorems}
+
+% --- リンク・参照系（必ず後ろの方で読み込む） ---
+\usepackage[dvipdfmx, unicode=true, colorlinks=true, linkcolor=blue, citecolor=blue]{hyperref}
+
+% ⚠️ 参照系パッケージの正しい読み込み順: hyperref -> cleveref -> autonum
+\usepackage{cleveref}
+
+%\setcounter{section}{+1}
+%\setcounter{subsection}{+1}
+%\setcounter{subsubsection}{+1}
+\numberwithin{equation}{section}
+
+\theoremstyle{definition}
+\newtheorem{thm}{定理}[section]
+\newtheorem{lem}[thm]{補題}
+\newtheorem{prop}[thm]{命題}
+\newtheorem{cor}[thm]{系}
+\newtheorem{ass}[thm]{仮定}
+\newtheorem{conj}[thm]{予想}
+\newtheorem{dfn}[thm]{定義}
+\newtheorem*{rem*}{注意}
+\newtheorem{ex}[thm]{例}
+\newtheorem{que}[thm]{問}
+\newtheorem*{fact*}{事実}
+\newtheorem*{apd*}{補足}
+
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+  \pushQED{\qed}%
+  \normalfont \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item\relax
+  {\bfseries
+  #1\@addpunct{.}}\hspace\labelsep\ignorespaces
+}{%
+  \popQED\endtrivlist\@endpefalse
+}
+\makeatother
+\renewcommand{\proofname}{証明}
+
+\newcommand{\ctext}[1]{\raise0.2ex\hbox{\textcircled{\scriptsize{#1}}}}
+\newcommand{\no}{\noindent}
+\let\d\relax
+\newcommand{\d}{\displaystyle}
+%\newcommand{\pmat}[1]{\begin{pmatrix} #1 \end{pmatrix}}
+\DeclareMathOperator{\id}{id}
+\let\ker\relax
+\DeclareMathOperator{\ker}{Ker}
+\let\Im\relax
+\DeclareMathOperator{\im}{Im}
+\let\Re\relax
+\DeclareMathOperator{\re}{Re}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\let\P\relax
+\newcommand{\P}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\F}{\mathcal{F}}
+\let\u\relax
+\newcommand{\u}{\bm{u}}
+\let\v\relax
+\newcommand{\v}{\bm{v}}
+\newcommand{\p}{\bm{p}}
+\newcommand{\bpi}{\bm{\pi}}
+\newcommand{\bphi}{\bm{\phi}}
+\newcommand{\e}{\varepsilon}
+\newcommand{\ind}{\mathbbm{1}}
+\newcommand{\0}{\bm{0}}
+\newcommand{\1}{\bm{1}}
+\newcommand{\dt}{\Delta t}
+
+\newcommand{\cbecause}{\ctext{$\because$}}
+\newcommand{\Llr}{\Longleftrightarrow}
+\newcommand{\Lr}{\Longrightarrow}
+\newcommand{\lr}{\longrightarrow}
+\newcommand{\mvert}{\:\middle\vert\:}
+\newcommand{\st}{\text{ s.t. }}
+\newcommand{\ie}{\text{ i.e., }}
+
+\title{\bf 大数の弱法則}
+\author{北海道大学　理学部数学科 \\ 奥田　健}
+\date{}
+
+\begin{document}
+
+
+\maketitle{}
+
+\section{はじめに}
+% 先ほど作成した、大数の弱法則から中心極限定理への繋がりを述べた序文をここに配置します。
+
+\section{必要事項（準備）}
+
+\subsection{確率空間}
+% 確率空間 $(\Omega, \mathcal{F}, P)$、確率変数、期待値、分散の厳密な定義を記述します。
+% 合わせて、後半の「最も条件の緩い弱法則」を見据えて、「確率収束」の定義もここに書いておくと非常にスムーズです。
+
+\subsection{Markovの不等式}
+% ※論理の流れとして、Markovの不等式を先に示し、それを応用してChebyshevの不等式を導出するのが自然で美しいです。
+% 非負値確率変数に対して P(X \ge a) \le E[X]/a を示します。
+
+\begin{thm}[Chebyshevの不等式（一般形）]
+$\varphi : \R \to \R$ が $\varphi \ge 0$ をみたすとき，$A \in \mathcal{R}$ とし，$i_A = \inf\{\varphi(y) : y \in A\}$ とおくと，次が成り立つ．
+\[
+  i_A P(X \in A) \le E(\varphi(X) ; X \in A) \le E(\varphi(X))
+\]
+\end{thm}
+
+\begin{proof}
+$i_A$ の定義と仮定 $\varphi \ge 0$ より
+\[
+  i_A 1_{(X \in A)} \le \varphi(X) 1_{(X \in A)} \le \varphi(X)
+\]
+が成り立つ．よって，期待値を考えて単調性を用いると，結論を得る．
+\end{proof}
+
+\emph{注意．} この不等式を Markov の不等式とよび，$\varphi(X) = x^2$ で $A = \{x : |x| \ge a\}$ という特別な場合を Chebyshev の不等式とよぶこともある．
+\[
+  a^2 P(|X| \ge a) \le E(X^2)
+\]
+
+\subsection{Chebyshevの不等式}
+% Markovの不等式において、X を |X - \mu|^2 に置き換えることで直ちに導けることを記述します。
+% この不等式が、次の章のL_2弱法則の証明において直接の武器になります。
+
+上の一般形において $\varphi(x) = (x-\mu)^2$，$A = \{x : |x - \mu| \ge a\}$ とおくと，確率変数 $X$（$E(X) = \mu$）に対して
+\[
+  a^2 P(|X - \mu| \ge a) \le E\!\left((X-\mu)^2\right) = \mathrm{var}(X)
+\]
+を得る．これが，次章の $L^2$弱法則の証明において直接の武器になる．
+
+\section{\texorpdfstring{$L^2$}{L2}弱法則}
+
+\subsection{無相関な確率変数列の和の分散}
+% 「無相関であれば和の分散は分散の和に等しい」という、独立性よりも少し緩い条件（無相関性）で成り立つ性質を示します。
+% $V[\sum X_i] = \sum V[X_i] + 2\sum_{i<j} Cov(X_i, X_j)$ を展開し、共分散（Covariance）が0になることを1行ずつ丁寧に数式で変形します。
+
+\begin{thm}[定理2.2.1]
+$E(X_i^2) < \infty$ である確率変数列 $X_1,\dots,X_n$ が無相関であれば，
+\[
+  \mathrm{var}(X_1 + \cdots + X_n) = \mathrm{var}(X_1) + \cdots + \mathrm{var}(X_n)
+\]
+が成り立つ．
+\end{thm}
+
+\begin{proof}
+$\mu_i = E(X_i)$，$S_n = \sum_{i=1}^n X_i$ とおく．$E(S_n) = \sum_{i=1}^n \mu_i$ だから，分散の定義を用い，和の2乗を積の形で書いて展開すると，
+\begin{align*}
+  \mathrm{var}(S_n)
+  &= E\!\left((S_n - E(S_n))^2\right)
+   = E\!\left(\left\{\sum_{i=1}^n (X_i - \mu_i)\right\}^2\right) \\
+  &= E\!\left(\sum_{i=1}^n \sum_{j=1}^n (X_i - \mu_i)(X_j - \mu_j)\right) \\
+  &= \sum_{i=1}^n E\!\left((X_i - \mu_i)^2\right) + 2\sum_{i=1}^n \sum_{j=1}^{i-1} E\!\left((X_i - \mu_i)(X_j - \mu_j)\right)
+\end{align*}
+となる．ただし，最後の等式では対角の項 $i=j$ を分け，$1 \le i < j \le n$ に関する和と $1 \le j < i \le n$ に関する和が等しいことを用いた．
+
+第1項は $\mathrm{var}(X_1) + \cdots + \mathrm{var}(X_n)$ だから，第2項が $0$ であることを示せばよい．これには $X_i$ と $X_j$ が無相関であることから，次に注意すればよい．
+\[
+  E\!\left((X_i - \mu_i)(X_j - \mu_j)\right)
+  = E(X_iX_j) - \mu_i E(X_j) - \mu_j E(X_i) + \mu_i\mu_j
+  = E(X_iX_j) - \mu_i\mu_j = 0
+\]
+\end{proof}
+
+\begin{lem}[補題2.2.2]
+$p > 0$ に対して $E(|Z_n|^p) \to 0$ ならば，$Z_n$ は $0$ に確率収束する．
+\end{lem}
+
+\begin{proof}
+Chebyshev の不等式を $\varphi(x) = x^p$，$X = |Z_n|$ として用いると，$\epsilon > 0$ に対して
+\[
+  P(|Z_n| \ge \epsilon) \le \epsilon^{-p} E(|Z_n|^p) \to 0
+\]
+がわかる．
+\end{proof}
+
+\subsection{定理の証明}
+% 標本平均 $\bar{X}_n = \frac{1}{n}\sum X_i$ の期待値と分散を計算し、Chebyshevの不等式に放り込むことで、
+% 確率が 0 に収束（すなわち $L^2$ の意味でも確率の意味でも平均へ収束）することを示します。
+
+\begin{thm}[定理2.2.3（$L^2$弱法則）]
+$X_1, X_2, \dots$ を，$E(X_i) = \mu$，$\mathrm{var}(X_i) \le C < \infty$ をみたす無相関な確率変数列とする．このとき $S_n = X_1 + \cdots + X_n$ とおくと，$n \to \infty$ のとき $S_n/n$ は $\mu$ に2次平均収束かつ確率収束する．
+\end{thm}
+
+\begin{proof}
+2次平均収束は，$E(S_n/n) = \mu$，および
+\[
+  E\!\left(\left(\frac{S_n}{n} - \mu\right)^2\right)
+  = \mathrm{var}\!\left(\frac{S_n}{n}\right)
+  = \frac{1}{n^2}\left(\mathrm{var}(X_1) + \cdots + \mathrm{var}(X_n)\right)
+  \le \frac{Cn}{n^2} \to 0
+\]
+からわかる．確率収束は，補題2.2.2 を $Z_n = S_n/n - \mu$ に適用すれば得られる．
+\end{proof}
+
+定理2.2.3 の特別な場合で最も重要なものは，$X_1, X_2, \dots$ が同じ分布をもつ独立確率変数列，すなわち i.i.d.\ の場合である．この場合，定理2.2.3 は，$E(X_i^2) < \infty$ であれば $S_n/n$ が $n \to \infty$ のとき $\mu = E(X_i)$ に確率収束することを示している．後の定理2.2.14 で，このことが成り立つには $E(|X_i|) < \infty$ であれば十分であることを示す．
+
+\subsection{使用例：Bernstein多項式への応用}
+% 大数の弱法則を用いて、閉区間上の任意の連続関数が多項式によって一様近似できること（Weierstrassの近似定理）を示します。
+% 確率変数としてコイン投げ（二項分布）をうまく設定することで、大数の法則が近似定理の証明に直結する鮮やかな一例です。
+
+\begin{ex}[例2.2.4（多項式近似）]
+$f$ を $[0,1]$ 上の連続関数とし，$f_n$ を
+\[
+  f_n(x) = \sum_{m=0}^n \binom{n}{m} x^m (1-x)^{n-m} f\!\left(\frac{m}{n}\right), \qquad
+  \binom{n}{m} = \frac{n!}{m!(n-m)!}
+\]
+で与えられる $f$ に対応する $n$ 次 Bernstein 多項式とすると，$n \to \infty$ のとき次が成り立つ．
+\[
+  \sup_{x \in [0,1]} |f_n(x) - f(x)| \to 0
+\]
+\end{ex}
+
+\begin{proof}
+まず，$S_n$ を $P(X_i = 1) = p$，$P(X_i = 0) = 1-p$ である独立確率変数の和とすると，$E(X_i) = p$，$\mathrm{var}(X_i) = p(1-p)$ であり，
+\[
+  P(S_n = m) = \binom{n}{m} p^m (1-p)^{n-m}
+\]
+が成り立つので，$E(f(S_n/n)) = f_n(p)$ である．定理2.2.3 より，$n \to \infty$ のとき $S_n/n$ は $p$ に確率収束する．これらが $f_n(p)$ を考える動機であるが，この証明では，定理2.2.3 の結果以上にその証明を用いる．
+
+$p \in [0,1]$ に対して $p(1-p) \le 1/4$ であることを用いると，定理2.2.3 の証明から
+\[
+  P\!\left(\left|\frac{S_n}{n} - p\right| > \delta\right)
+  \le \frac{\mathrm{var}(S_n/n)}{\delta^2}
+  = \frac{p(1-p)}{n\delta^2}
+  \le \frac{1}{4n\delta^2}
+\]
+を得る．$E(f(S_n/n)) \to f(p)$ の証明には，$M = \sup_{x \in [0,1]} |f(x)|$ とおき，$\epsilon > 0$ に対して $\delta > 0$ を，$|x - y| < \delta$ ならば $|f(x) - f(y)| < \epsilon$ となるようにとる（連続関数は有界区間上で一様連続だから可能である）．ここで Jensen の不等式を用いると
+\[
+  \left|E\!\left(f\!\left(\frac{S_n}{n}\right)\right) - f(p)\right|
+  \le E\!\left(\left|f\!\left(\frac{S_n}{n}\right) - f(p)\right|\right)
+  \le \epsilon + 2M P\!\left(\left|\frac{S_n}{n} - p\right| > \delta\right)
+\]
+がわかる．よって，$n \to \infty$ とすると，$\limsup_{n\to\infty} |E(f(S_n/n)) - f(p)| \le \epsilon$ となり，$\epsilon$ は任意なので結論を得る．
+\end{proof}
+
+\section{三角配列に対する弱法則}
+% 各行ごとに確率変数の数が変わる「三角配列（Triangular array）」$X_{n,k}$ に対する弱法則を定式化します。
+% これは、次に控える「同分布とは限らない場合」や、将来的に学びたいとおっしゃっていた「中心極限定理（Lindebergの条件など）」の土台となる重要なステップです。
+
+確率論における多くの古典的な結果は独立同分布（i.i.d.）の場合に扱われるが，行に関する和 $S_n = X_{n,1} + \cdots + X_{n,n}$ を考える場合，各行の確率変数は独立でありさえすれば，同分布であるという仮定なしに成り立つ結果も多い．このような配列を三角配列（triangular array）とよぶ．
+
+確率変数の弱法則を2次のモーメントが存在しない場合に拡張するためには，打切りをして Chebyshev の不等式を用いる．まず，一般的で役に立つ定理を述べる．証明に必要なことをそのまま仮定するので，証明は容易であるが，後述の特別な場合に仮定を確認するためには少し議論が必要である．一般的な結果を述べることで，証明の本質的な部分を特定できる．
+
+確率変数 $X$ の打切り（truncation）を
+\[
+  \bar{X} = X 1_{(|X| \le M)} =
+  \begin{cases}
+    X & (|X| \le M) \\
+    0 & (|X| > M)
+  \end{cases}
+\]
+とする．
+
+\begin{thm}[定理2.2.11（三角配列に対する弱法則）]
+各 $n$ に対し，$X_{n,k}$，$1 \le k \le n$ は独立とする．$b_n > 0$，$b_n \to \infty$ をみたす $b_n$ に対して $\bar{X}_{n,k} = X_{n,k} 1_{(|X_{n,k}| \le b_n)}$ とおき，$n \to \infty$ のとき次が成り立つと仮定する．
+\begin{enumerate}
+  \item[(i)] $\displaystyle \sum_{k=1}^n P(|X_{n,k}| > b_n) \to 0$
+  \item[(ii)] $\displaystyle b_n^{-2} \sum_{k=1}^n E(\bar{X}_{n,k}^2) \to 0$
+\end{enumerate}
+このとき，$S_n = X_{n,1} + \cdots + X_{n,n}$ とし，$a_n = \sum_{k=1}^n E(\bar{X}_{n,k})$ とおくと，
+\[
+  \frac{S_n - a_n}{b_n} \to 0
+\]
+が確率収束の意味で成り立つ．
+\end{thm}
+
+\begin{proof}
+$\bar{S}_n = \bar{X}_{n,1} + \cdots + \bar{X}_{n,n}$ とおく．明らかに
+\[
+  P\!\left(\left|\frac{S_n - a_n}{b_n}\right| > \epsilon\right)
+  \le P(S_n \ne \bar{S}_n) + P\!\left(\left|\frac{\bar{S}_n - a_n}{b_n}\right| > \epsilon\right)
+\]
+が成り立つ．第1項については，仮定(i)より
+\[
+  P(S_n \ne \bar{S}_n)
+  \le P\!\left(\bigcup_{k=1}^n \{\bar{X}_{n,k} \ne X_{n,k}\}\right)
+  \le \sum_{k=1}^n P(|X_{n,k}| > b_n) \to 0
+\]
+が成り立つ．第2項については，Chebyshev の不等式，$a_n = E(\bar{S}_n)$ であること，定理2.2.1 および $\mathrm{var}(X) \le E(X^2)$ より，(ii)を用いると
+\[
+  P\!\left(\left|\frac{\bar{S}_n - a_n}{b_n}\right| > \epsilon\right)
+  \le \frac{1}{\epsilon^2} E\!\left(\left(\frac{\bar{S}_n - a_n}{b_n}\right)^2\right)
+  = \frac{1}{\epsilon^2 b_n^2}\, \mathrm{var}(\bar{S}_n)
+  = \frac{1}{\epsilon^2 b_n^2} \sum_{k=1}^n \mathrm{var}(\bar{X}_{n,k})
+  \le \frac{1}{\epsilon^2 b_n^2} \sum_{k=1}^n E(\bar{X}_{n,k}^2) \to 0
+\]
+となり，定理の結論を得る．
+\end{proof}
+
+\section{最も条件の緩い弱法則}
+% 分散の有限性（$L^2$）を仮定せず、期待値の有限性（$L^1$）だけで成り立つ「ヒンチンの大数の弱法則（Khinchin's weak law）」を扱います。
+% 切り捨て（Truncation）の技法を使って、分散が無限大になる成分をうまくコントロールしながら、
+% 前章の「三角配列に対する弱法則」に帰着させて証明を完結させます。これで7〜10頁の最高潮（クライマックス）を迎えます。
+
+\begin{thm}[定理2.2.12（大数の弱法則）]
+$X_1, X_2, \dots$ を
+\[
+  xP(|X_i| \ge x) \to 0, \qquad x \to \infty
+\]
+をみたす i.i.d.\ とする．このとき，$S_n = X_1 + \cdots + X_n$，$\mu_n = E(X_1 1_{(|X_1| \le n)})$ とおくと，$S_n/n - \mu_n$ は $0$ に確率収束する．
+\end{thm}
+
+\emph{注意．} 定理の仮定は，$S_n/n - a_n \to 0$ となる定数 $a_n$ の存在のために必要である．
+
+\begin{proof}
+定理2.2.11 を $X_{n,k} = X_k$，$b_n = n$ として適用する．条件(i)を確認するために，仮定から
+\[
+  \sum_{k=1}^n P(|X_{n,k}| > n) = n P(|X_i| > n) \to 0
+\]
+が成り立つことに注意する．(ii)の確認には，$n^{-2} \cdot n E(\bar{X}_{n,1}^2) \to 0$ を示す必要がある．このために，今後繰り返し用いる次の結果を示す．
+\end{proof}
+
+\begin{lem}[補題2.2.13]
+$Y \ge 0$，$p > 0$ ならば，
+\[
+  E(Y^p) = \int_0^\infty p y^{p-1} P(Y > y)\, dy
+\]
+が成り立つ．
+\end{lem}
+
+\begin{proof}
+期待値の定義と（非負な確率変数に対する）Fubini の定理を用いて積分を計算すると，次を得る．
+\begin{align*}
+  \int_0^\infty p y^{p-1} P(Y > y)\, dy
+  &= \int_0^\infty \int_\Omega p y^{p-1} 1_{(Y>y)}\, dP\, dy
+   = \int_\Omega \int_0^\infty p y^{p-1} 1_{(Y>y)}\, dy\, dP \\
+  &= \int_\Omega \int_0^Y p y^{p-1}\, dy\, dP
+   = \int_\Omega Y^p\, dP = E(Y^p)
+\end{align*}
+\end{proof}
+
+定理2.2.12 の証明に戻る．補題2.2.13 と $\bar{X}_{n,1} = X_1 1_{(|X_1| \le n)}$ より，$P(|\bar{X}_{n,1}| > y)$ は $y \ge n$ ならば $0$ で，$y \le n$ ならば $P(|X_1| > y) - P(|X_1| > n)$ に等しく，
+\[
+  E(\bar{X}_{n,1}^2) = \int_0^\infty 2y P(|\bar{X}_{n,1}| > y)\, dy \le \int_0^n 2y P(|X_1| > y)\, dy
+\]
+が成り立つことに注意する．$yP(|X_1| > y) \to 0$ を用いて，$n \to \infty$ のとき
+\[
+  \frac{E(\bar{X}_{n,1}^2)}{n} = \frac{1}{n} \int_0^n 2y P(|X_1| > y)\, dy \to 0
+\]
+が成り立つことを示したい．右辺は $g(y) = 2yP(|X_1| > y)$ の $[0,n]$ における平均であり，$y \to \infty$ のとき $g(y) \to 0$ だから，この収束は直感的に理解できる．詳しく述べるために，$0 \le g(y) \le 2y$ かつ $y \to \infty$ のとき $g(y) \to 0$ だから $\sup g(y) < \infty$ であることに注意して，$g_n(y) = g(ny)$ とおく．$g_n$ は有界で $g_n(y) \to 0$ a.e.\ だから，有界収束定理より
+\[
+  \frac{1}{n} \int_0^n g(y)\, dy = \int_0^1 g_n(x)\, dx \to 0
+\]
+となって，定理の結論を得る．
+
+\emph{注意．} 補題2.2.13 を $p = 1 - \epsilon$，$\epsilon > 0$ として適用すると，$xP(|X_1| > x) \to 0$ より $E(|X_1|^{1-\epsilon}) < \infty$ となるので，定理2.2.12 の仮定が平均の有限性よりずっと弱いわけではない．
+
+最後に，最もよく知られた形の弱法則を述べる．
+
+\begin{thm}[定理2.2.14]
+$X_1, X_2, \dots$ を $E(|X_i|) < \infty$ である i.i.d.\ とし，$S_n = X_1 + \cdots + X_n$，$\mu = E(X_1)$ とおく．このとき，$S_n/n$ は $\mu$ に確率収束する．
+\end{thm}
+
+\begin{proof}
+優収束定理から
+\[
+  xP(|X_1| > x) \le E\!\left(|X_1| 1_{(|X_1|>x)}\right) \to 0, \qquad x \to \infty
+\]
+\[
+  \mu_n = E\!\left(X_1 1_{(|X_1| \le n)}\right) \to E(X_1) = \mu, \qquad n \to \infty
+\]
+がわかる．定理2.2.12 を用いると，$\epsilon > 0$ に対して $P(|S_n/n - \mu_n| > \epsilon/2) \to 0$ もわかる．$\mu_n \to \mu$ だから，$P(|S_n/n - \mu| > \epsilon) \to 0$ を得る．
+\end{proof}
+
+\subsection{弱法則が成り立たない例：Cauchy 分布}
+
+\begin{ex}[例2.2.15]
+弱法則が成り立たない例を挙げるために，$X_1, X_2, \dots$ が独立で次の Cauchy 分布に従うとする．
+\[
+  P(X_i \le x) = \int_{-\infty}^x \frac{dt}{\pi(1+t^2)}
+\]
+$x \to \infty$ のとき
+\[
+  P(|X_1| > x) = 2\int_x^\infty \frac{dt}{\pi(1+t^2)} \sim \frac{2}{\pi}\int_x^\infty t^{-2}\, dt = \frac{2}{\pi} x^{-1}
+\]
+である．このことから，$S_n/n - \mu_n \to 0$ をみたす数列 $\mu_n$ が存在しないと結論づけることができる．実際，$S_n/n$ が $X_1$ と同じ分布をもつことが示される．
+\end{ex}
+
+次の例が示すように，$E(|X_i|) = \infty$ のときにも弱法則が成り立つ場合がある．
+
+\subsection{応用例：サンクトペテルブルクのパラドックス}
+
+\begin{ex}[例2.2.16（サンクトペテルブルクのパラドックス）]
+$X_1, X_2, \dots$ を，$j \ge 1$ に対し
+\[
+  P(X_i = 2^j) = 2^{-j}
+\]
+である独立確率変数とする．言い換えると，硬貨投げで $j$ 回続けて表が出ると $2^j$ ドル獲得する場合である．このパラドックスは，期待値は $E(X_1) = \infty$ だが，このゲームに無限の参加費は払わないだろうということである．定理2.2.11 を用いると，ゲーム（硬貨投げ）を $n$ 回行うとしたときの参加費がわかる．
+\end{ex}
+
+\begin{proof}[考察]
+この例では，$X_{n,k} = X_k$ とおく．定理2.2.11 を適用するには $b_n$ を選ぶ必要がある．そのためには，条件(ii)を確認する際には $b_n$ をできるだけ小さくとり，しかも(i)をみたさなければならない．このことを念頭に，整数 $m$ に対して
+\[
+  P(X_1 \ge 2^m) = \sum_{j=m}^\infty 2^{-j} = 2^{-m+1}
+\]
+であることに注意する．$m(n) = \log_2 n + K(n)$ とおく．ただし，$K(n)$ は $K(n) \to \infty$ かつ $m(n)$ が整数になる（よって，上が成り立つ）ように選ぶ．$b_n = 2^{m(n)}$ とおくと，
+\[
+  nP(X_1 \ge b_n) = n 2^{-m(n)+1} = 2^{-K(n)+1} \to 0
+\]
+となり，(i)が成り立つ．(ii)を確認するために，$\bar{X}_{n,k} = X_k 1_{(|X_k| \le b_n)}$ とおくと
+\[
+  E(\bar{X}_{n,k}^2) = \sum_{j=1}^{m(n)} 2^{2j} \cdot 2^{-j} \le 2^{m(n)} \sum_{k=0}^\infty 2^{-k} = 2b_n
+\]
+であることに注意する．(ii)で考える量は $2n/b_n$ より小さく，
+\[
+  b_n = 2^{m(n)} = n 2^{K(n)} \qquad \text{かつ} \qquad K(n) \to \infty
+\]
+だから $0$ に収束する．
+
+次の2段階では，$a_n$ を求めて，定理2.2.11 を適用する．
+\[
+  E(\bar{X}_{n,k}) = \sum_{j=1}^{m(n)} 2^j 2^{-j} = m(n)
+\]
+より，$a_n = n m(n)$ である．$m(n) = \log n + K(n)$ だから（この例の中ではずっと対数の底は $2$ である），$n \to \infty$ のとき $K(n)/\log n \to 0$ ならば $a_n/(n\log n) \to 1$ が成り立つ．そして，定理2.2.11 を適用すると，確率収束の意味で
+\[
+  \frac{S_n - a_n}{n 2^{K(n)}} \to 0
+\]
+を得る．$n$ が大きいとき $K(n) \le \log\log n$ であるようにとると，この収束が分母を $n\log n$ に置き換えても成立し，$S_n/(n\log n)$ が $1$ に確率収束する．
+\end{proof}
+
+\end{document}
