@@ -1,0 +1,150 @@
+\documentclass[dvipdfmx]{jsarticle}
+\usepackage[a4paper, top=20truemm, bottom=20truemm, left=20truemm, right=20truemm]{geometry}
+
+% --- 数式・記号系パッケージ ---
+\usepackage{amsmath, amssymb, amsfonts, amsbsy, amsthm, latexsym, bbm}
+\usepackage{mathtools} % amsmathの拡張（非常に優秀）
+\usepackage{mathrsfs, bm}
+
+% physics パッケージの代わりに、よく使う便利な括弧の自動調整マクロを定義
+% (不要な場合は削除してください。 \abs{x} や \norm{x} が綺麗に使えるようになります)
+%\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+%\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+% --- グラフィックス・配置系 ---
+\usepackage{graphicx}
+\usepackage{float} 
+\usepackage{subcaption}
+
+% --- グラフ・図（TikZ / tcolorbox） ---
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{calc}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{raster,skins,breakable,theorems}
+
+% --- リンク・参照系（必ず後ろの方で読み込む） ---
+\usepackage[dvipdfmx, unicode=true, colorlinks=true, linkcolor=blue, citecolor=blue]{hyperref}
+
+% ⚠️ 参照系パッケージの正しい読み込み順: hyperref -> cleveref -> autonum
+\usepackage{cleveref}
+
+%\setcounter{section}{+1}
+%\setcounter{subsection}{+1}
+%\setcounter{subsubsection}{+1}
+\numberwithin{equation}{section}
+
+\theoremstyle{definition}
+\newtheorem{thm}{定理}[section]
+\newtheorem{lem}[thm]{補題}
+\newtheorem{prop}[thm]{命題}
+\newtheorem{cor}[thm]{系}
+\newtheorem{ass}[thm]{仮定}
+\newtheorem{conj}[thm]{予想}
+\newtheorem{dfn}[thm]{定義}
+\newtheorem*{rem}{注意}
+\newtheorem{ex}[thm]{例}
+\newtheorem{que}[thm]{問}
+\newtheorem*{fact}{事実}
+\newtheorem*{apd}{補足}
+
+
+\renewcommand{\proofname}{証明}
+
+\newcommand{\ctext}[1]{\raise0.2ex\hbox{\textcircled{\scriptsize{#1}}}}
+\newcommand{\no}{\noindent}
+\let\d\relax
+\newcommand{\d}{\displaystyle}
+%\newcommand{\pmat}[1]{\begin{pmatrix} #1 \end{pmatrix}}
+\DeclareMathOperator{\id}{id}
+\let\ker\relax
+\DeclareMathOperator{\ker}{Ker}
+\let\Im\relax
+\DeclareMathOperator{\im}{Im}
+\let\Re\relax
+\DeclareMathOperator{\re}{Re}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\let\P\relax
+\newcommand{\P}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\F}{\mathcal{F}}
+\let\u\relax
+\newcommand{\u}{\bm{u}}
+\let\v\relax
+\newcommand{\v}{\bm{v}}
+\newcommand{\p}{\bm{p}}
+\newcommand{\bpi}{\bm{\pi}}
+\newcommand{\bphi}{\bm{\phi}}
+\newcommand{\e}{\varepsilon}
+\newcommand{\ind}{\mathbbm{1}}
+\newcommand{\0}{\bm{0}}
+\newcommand{\1}{\bm{1}}
+\newcommand{\dt}{\ensuremath{\Delta t}}
+
+\newcommand{\cbecause}{\ctext{$\because$}}
+\newcommand{\Llr}{\Longleftrightarrow}
+\newcommand{\Lr}{\Longrightarrow}
+\newcommand{\lr}{\longrightarrow}
+\newcommand{\mvert}{\:\middle\vert\:}
+\newcommand{\st}{\text{ s.t. }}
+\newcommand{\ie}{\text{ i.e., }}
+
+\title{\bf 大数の弱法則}
+\author{北海道大学　理学部数学科 \\ 奥田　健}
+\date{2026年7月3日}
+
+\begin{document}
+\maketitle
+\section{はじめに}
+本レポートでは確率論における大数の弱法則を述べる．大数の弱法則は，独立同分布な確率変数列の平均が母平均に収束することを保証するものであり，統計学や確率論の基礎的な結果である．
+端的に言えば、ある確率変数の期待値が存在する場合、独立同分布な確率変数の平均はその期待値に近づくことを意味する．
+サイコロで考えてみると、サイコロを何度も振ったときの目の平均は、理論上の期待値である $3.5$ に近づくことが期待される．
+この法則は直感的には当たり前のように思えるかもしれないが、その厳密な証明には確率論の基本的な概念や定理が必要でであり、
+本稿で紹介する「一番条件の緩い大数の弱法則」に至るまでには、その前段としていくつかのステップを踏まなければならない。
+このような背景を踏まえ、まずは確率収束の概念を定義し、次に無相関な確率変数列と分散の性質について述べる．
+\section{確率収束}
+
+
+
+
+\section{無相関な確率変数列と分散}
+
+\begin{thm}
+$E(X_i^2) < \infty$ である確率変数列 $X_1,\dots,X_n$ が無相関であれば，
+\[
+  \mathrm{var}(X_1 + \cdots + X_n) = \mathrm{var}(X_1) + \cdots + \mathrm{var}(X_n)
+\]
+が成り立つ．
+\end{thm}
+
+\begin{proof}
+$\mu_i = E(X_i)$，$S_n = \sum_{i=1}^n X_i$ とおく．$E(S_n) = \sum_{i=1}^n \mu_i$ だから，分散の定義を用い，和の2乗を積の形で書いて展開すると，
+\begin{align*}
+  \mathrm{var}(S_n)
+  &= E\!\left((S_n - E(S_n))^2\right)
+   = E\!\left(\left\{\sum_{i=1}^n (X_i - \mu_i)\right\}^2\right) \\
+  &= E\!\left(\sum_{i=1}^n \sum_{j=1}^n (X_i - \mu_i)(X_j - \mu_j)\right) \\
+  &= \sum_{i=1}^n E\!\left((X_i - \mu_i)^2\right) + 2\sum_{i=1}^n \sum_{j=1}^{i-1} E\!\left((X_i - \mu_i)(X_j - \mu_j)\right)
+\end{align*}
+となる．ただし，最後の等式では対角の項 $i=j$ を分け，$1 \le i < j \le n$ に関する和と $1 \le j < i \le n$ に関する和が等しいことを用いた．
+この第2項を展開すると、$X_i$ と $X_j$ が無相関であることから，次のようになる
+\[
+  E\!\left((X_i - \mu_i)(X_j - \mu_j)\right)
+  = E(X_iX_j) - \mu_i E(X_j) - \mu_j E(X_i) + \mu_i\mu_j
+  = E(X_iX_j) - \mu_i\mu_j = 0
+\]
+\end{proof}
+
+
+
+
+
+\end{document}
