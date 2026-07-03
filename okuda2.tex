@@ -153,18 +153,25 @@ $X_1, X_2, \dots$ を期待値が存在する（$E[|X_i|] < \infty$）独立同�
     attach title to upper,  % タイトルを枠内にそのまま繋げる
     after title={\medskip\hrule\medskip} % タイトルの下に区切り線を入れる
 ]
-\begin{theorem}[$L^2$弱法則]
   $X_1, X_2, \dots$ を，$E(X_i) = \mu$，$\mathrm{var}(X_i) \le C < \infty$ をみたす無相関な確率変数列とする．このとき $S_n = X_1 + \cdots + X_n$ とおくと，$n \to \infty$ のとき $S_n/n$ は $\mu$ に2次平均収束かつ確率収束する.
-\end{theorem}
 \end{tcolorbox}
 
+この主張は，のちに証明する最終目標（大数の弱法則）に比べると，「分散が有限（$\mathrm{var}(X_i) \le C$）」という強い条件が付いている．では，このサブゴールを達成するために，まずは必要となる「2次平均収束」の定義と，証明の強力な武器となる「チェビシェフの不等式」を準備していく．
 
 
-この主張は，のちに証明する最終目標（大数の弱法則）に比べると，「分散が有限（$\mathrm{var}(X_i) \le C$）」という強い条件が付いている．
-では，このサブゴールを達成するために，まずは必要となる「2次平均収束」の定義と，証明の強力な武器となる「チェビシェフの不等式」を準備していく．
-
-
-
+\begin{thm}\
+\textbf{チェビシェフの不等式}\\
+  $\phi:\R \to \R$ が非負で，$A\in\mathbb{R}$ に対して，$i_A=\inf\{\phi(x):x\in A\}$とおく．このとき，任意の確率変数 $X$ に対して
+    $$i_A P(X\in A) \leq E(\phi(X)\1_{X\in A}) \leq \E(\phi(X))$$
+    が成り立つ．  
+\end{thm}
+\begin{proof}
+  $i_A$ は $A$ 上での $\phi$ の下限であるから，任意の $x\in A$ に対して $\phi(x)\geq i_A$ が成り立つ．したがって，$X\in A$ のとき $\phi(X)\geq i_A$ であることから，
+  \[
+    i_A \1_{X\in A} \leq \phi(X)\1_{X\in A} \leq \phi(X)
+  \]
+  が成り立つことから，期待値を取っても不等式は成り立つことがわかる．
+\end{proof}
 
 
 \section{無相関な確率変数列と分散}
