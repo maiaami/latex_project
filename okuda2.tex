@@ -133,10 +133,8 @@ $X_1, X_2, \dots$ を期待値が存在する（$E[|X_i|] < \infty$）独立同�
 \[
   \frac{S_n}{n} \xrightarrow{P} \mu \quad (n \to \infty)
 \]
-が成り立つ．
 \end{tcolorbox}
-
-この一見シンプルに見える主張だが，実 は「期待値が存在する」という非常に緩い条件だけでこれを証明するのは一筋縄ではいかない．
+これは一見シンプルな主張に見えるが，実は「期待値が存在する」という非常に緩い条件だけでこれを証明するのは一筋縄ではいかない．
 そこでまずは，もう少し条件を厳しくした（例えば「分散が有限である」など）扱いやすいケースから出発し，徐々にこの最終目標へと迫っていくことにする．
 
 \section{分散が有限な場合の大数の弱法則}
@@ -156,7 +154,7 @@ $X_1, X_2, \dots$ を期待値が存在する（$E[|X_i|] < \infty$）独立同�
   $X_1, X_2, \dots$ を，$E(X_i) = \mu$，$\mathrm{var}(X_i) \le C < \infty$ をみたす無相関な確率変数列とする．このとき $S_n = X_1 + \cdots + X_n$ とおくと，$n \to \infty$ のとき $S_n/n$ は $\mu$ に2次平均収束かつ確率収束する.
 \end{tcolorbox}
 
-この主張は，のちに証明する最終目標（大数の弱法則）に比べると，「分散が有限（$\mathrm{var}(X_i) \le C$）」という強い条件が付いている．では，このサブゴールを達成するために，まずは必要となる「2次平均収束」の定義と，証明の強力な武器となる「チェビシェフの不等式」をはじめとした材料を準備していく．
+この主張は，のちに証明する最終目標（大数の弱法則）に比べると，「分散が有限（$\mathrm{var}(X_i) \le C$）」という強い条件が付いている．では，このサブゴールを達成するために，まずは必要となる「2次平均収束」の定義と，証明の強力な武器となる「チェビシェフの不等式」を準備していく．
 
 \begin{thm}\
 \textbf{チェビシェフの不等式}\\
@@ -235,10 +233,23 @@ $f$ を $[0,1]$ 上の連続関数とし，$f_n$ を
   \[
     |f_n(x) - f(x)|=\left|E\!\left[f\!\left(\frac{S_n}{n}\right)\right] - f(x)\right|\leq E\!\left[\left|f\!\left(\frac{S_n}{n}\right) - f(x)\right|\right]
   \]
-  となる。ところで，$f$ は 連続関数であるから，閉区間$[0,1]$ 上で一様連続である．よって任意の $\varepsilon>0$ に対して，ある $\delta>0$ が存在して，$|x-y|<\delta$ ならば $|f(x)-f(y)|<\varepsilon/2$ が成り立つ．
-  したがって，$|S_n/n - x|<\delta$ のとき，$|f(S_n/n)-f(x)|<\varepsilon/2$ が成り立つ．一方，$|S_n/n - x|\geq \delta$ のとき，$|f(S_n/n)-f(x)|\leq 2\|f\|_\infty$ が成り立つ．したがって
+  となる。ところで，$f$ は 連続関数であるから，閉区間$[0,1]$ 上で一様連続である．よって任意の $\varepsilon>0$ に対して，ある $\delta>0$ が存在して，$|x-y|<\delta$ ならば $|f(x)-f(y)|<\varepsilon$ が成り立つ．
+  一方，$M=\sup_{x\in[0,1]}|f(x)|$とおけば，$|S_n/n - x|\geq \delta$ のとき，$|f(S_n/n)-f(x)|\leq 2M$ が成り立つ．
+  したがって，次のように分けて評価できる：
+  \begin{align*}
+    E\left[ \left| f\left(\frac{S_n}{n}\right) - f(x) \right| \right] 
+    &= E\left[ \left| f\left(\frac{S_n}{n}\right) - f(x) \right| \boldsymbol{1}_{\{|S_n/n - x| < \delta\}} \right] + E\left[ \left| f\left(\frac{S_n}{n}\right) - f(x) \right| \boldsymbol{1}_{\{|S_n/n - x| \geq \delta\}} \right] \\
+    &\leq \varepsilon+ 2M P\left( \left| \frac{S_n}{n} - x \right| \geq \delta \right)
+  \end{align*}
+  となる。
+  ところで，$S_n$は確率変数$X_1,\dots,X_n$の和であり，$E(X_i)=x$，$\mathrm{var}(X_i)=x(1-x)\leq 1/4$で有限であることから，$L_2$弱収束を用いることができて，$S_n/n$は$x$に確率収束する。つまり，$n\to\infty$のとき，$P(|S_n/n - x| \geq \delta) \to 0$が成り立つ。したがって，十分大きな$n$に対して
+\[
+  E\left[ \left| f\left(\frac{S_n}{n}\right) - f(x) \right| \right] < \varepsilon
+\]
+が成り立つ。$\delta$は$x$に依存しないので，$x\in[0,1]$に対して一様に評価できる。
+よって，$n\to\infty$のとき，$\sup_{x\in[0,1]} |f_n(x) - f(x)| \to 0$が成り立つことが示された。
 
-\
+
 \end{proof}
 
 
