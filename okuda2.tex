@@ -156,13 +156,12 @@ $X_1, X_2, \dots$ を期待値が存在する（$E[|X_i|] < \infty$）独立同�
   $X_1, X_2, \dots$ を，$E(X_i) = \mu$，$\mathrm{var}(X_i) \le C < \infty$ をみたす無相関な確率変数列とする．このとき $S_n = X_1 + \cdots + X_n$ とおくと，$n \to \infty$ のとき $S_n/n$ は $\mu$ に2次平均収束かつ確率収束する.
 \end{tcolorbox}
 
-この主張は，のちに証明する最終目標（大数の弱法則）に比べると，「分散が有限（$\mathrm{var}(X_i) \le C$）」という強い条件が付いている．では，このサブゴールを達成するために，まずは必要となる「2次平均収束」の定義と，証明の強力な武器となる「チェビシェフの不等式」を準備していく．
-
+この主張は，のちに証明する最終目標（大数の弱法則）に比べると，「分散が有限（$\mathrm{var}(X_i) \le C$）」という強い条件が付いている．では，このサブゴールを達成するために，まずは必要となる「2次平均収束」の定義と，証明の強力な武器となる「チェビシェフの不等式」をはじめとした材料を準備していく．
 
 \begin{thm}\
 \textbf{チェビシェフの不等式}\\
   $\phi:\R \to \R$ が非負で，$A\in\mathbb{R}$ に対して，$i_A=\inf\{\phi(x):x\in A\}$とおく．このとき，任意の確率変数 $X$ に対して
-    $$i_A P(X\in A) \leq E(\phi(X)\1_{X\in A}) \leq \E(\phi(X))$$
+    \[i_A P(X\in A) \leq E(\phi(X)\1_{X\in A}) \leq E(\phi(X))\]
     が成り立つ．  
 \end{thm}
 \begin{proof}
@@ -170,8 +169,78 @@ $X_1, X_2, \dots$ を期待値が存在する（$E[|X_i|] < \infty$）独立同�
   \[
     i_A \1_{X\in A} \leq \phi(X)\1_{X\in A} \leq \phi(X)
   \]
-  が成り立つことから，期待値を取っても不等式は成り立つことがわかる．
+  が成り立つことから，期待値を取っても不等式が成り立つことがわかる．
 \end{proof}
+
+\begin{lem}
+  $p>0$に対して，$E(|X|^p)< \rightarrow0$ ならば，$X_n$ は $0$ に確率収束する．
+\end{lem}
+\begin{proof}
+  チェビシェフの不等式において， $\phi(x)=|x|^p$，$A=\{x:|x|\geq \varepsilon\}$ とおくと，$i_A=\inf\{|x|^p:|x|\geq \varepsilon\}=\varepsilon^p$ であるから， 
+  \[
+    \varepsilon^p P(|X_n| \geq \varepsilon) =\varepsilon^p P(|X_n|^p \geq \varepsilon^p)\leq E(|X_n|^p)
+  \]
+  が成り立つ．$E(|X_n|^p) \to 0$ であることから，右辺は $n \to \infty$ のとき $0$ に収束する．したがって，$X_n$ は $0$ に確率収束する．
+\end{proof} 
+
+\begin{dfn}[2次平均収束]
+  確率変数列 $\{X_n\}$ が確率変数 $X$ に \textbf{2次平均収束} するとは，次の条件を満たすことをいう：
+  \[
+    \lim_{n \to \infty} E\left[(X_n - X)^2\right] = 0.
+  \] 
+\end{dfn}
+
+さて，ここまでに述べてきた材料を用いることで，分散が有限な場合の大数の弱法則を証明することができる．改めて定理として述べると，次のようになる． 
+\begin{thm}[$L^2$弱法則]
+  $X_1, X_2, \dots$ を，$E(X_i) = \mu$，$\mathrm{var}(X_i) \le C < \infty$ をみたす無相関な確率変数列とする．このとき $S_n = X_1 + \cdots + X_n$ とおくと，$n \to \infty$ のとき $S_n/n$ は $\mu$ に2次平均収束かつ確率収束する.
+\end{thm}
+\begin{proof}
+  
+  まず，$S_n/n$ の分散を計算する．無相関な確率変数列に対しては，分散の加法性が成り立つことが知られている．したがって，
+  \[
+    \mathrm{var}\left(\frac{S_n}{n}\right) = \frac{1}{n^2} \mathrm{var}(S_n) = \frac{1}{n^2} \sum_{i=1}^n \mathrm{var}(X_i) \leq \frac{1}{n^2} \sum_{i=1}^n C = \frac{C}{n}.
+  \]
+  よって，$E\left[\left(\frac{S_n}{n} - \mu\right)^2\right] = \mathrm{var}\left(\frac{S_n}{n}\right) \leq \frac{C}{n}$ である．
+  $n \to \infty$ のとき，$\frac{C}{n} \to 0$ であるから，$E\left[\left(\frac{S_n}{n} - \mu\right)^2\right] \to 0$ が成り立つ．
+  したがって，$S_n/n$ は $\mu$ に2次平均収束する．
+  
+  確率収束については．補題3.2より，$E\left[\left(\frac{S_n}{n} - \mu\right)^2\right] \to 0$ であることから，$\frac{S_n}{n}$ は $\mu$ に確率収束する．
+\end{proof}
+
+\section{応用例：多項式近似（Bernstein 多項式）}
+
+\begin{ex}[例2.2.4（多項式近似）]
+$f$ を $[0,1]$ 上の連続関数とし，$f_n$ を
+\[
+  f_n(x) = \sum_{m=0}^n \binom{n}{m} x^m (1-x)^{n-m} f\!\left(\frac{m}{n}\right), \qquad
+  \binom{n}{m} = \frac{n!}{m!(n-m)!}
+\]
+で与えられる $f$ に対応する $n$ 次 Bernstein 多項式とすると，$n \to \infty$ のとき次が成り立つ．
+\[
+  \sup_{x \in [0,1]} |f_n(x) - f(x)| \to 0
+\]
+\end{ex}
+
+\begin{proof}
+
+  $X_1,\dots,X_n$ を $[0,1]$ 上の確率変数で，$P(X_i=1)=x$，$P(X_i=0)=1-x$ であるとする．このとき，$S_n = X_1 + \cdots + X_n$とおくと，$S_n$ は二項分布 $B(n,x)$ に従う．したがって，
+  \[
+    P(S_n = m) = \binom{n}{m} x^m (1-x)^{n-m}
+  \]
+  である．したがって，
+  \[
+    E\!\left[f\!\left(\frac{S_n}{n}\right)\right] = \sum_{m=0}^n P(S_n = m) f\!\left(\frac{m}{n}\right) = \sum_{m=0}^n \binom{n}{m} x^m (1-x)^{n-m} f\!\left(\frac{m}{n}\right) = f_n(x)
+  \]
+  ということになる。これを用いると
+  \[
+    |f_n(x) - f(x)|=\left|E\!\left[f\!\left(\frac{S_n}{n}\right)\right] - f(x)\right|\leq E\!\left[\left|f\!\left(\frac{S_n}{n}\right) - f(x)\right|\right]
+  \]
+  となる。ところで，$f$ は 連続関数であるから，閉区間$[0,1]$ 上で一様連続である．よって任意の $\varepsilon>0$ に対して，ある $\delta>0$ が存在して，$|x-y|<\delta$ ならば $|f(x)-f(y)|<\varepsilon/2$ が成り立つ．
+  したがって，$|S_n/n - x|<\delta$ のとき，$|f(S_n/n)-f(x)|<\varepsilon/2$ が成り立つ．一方，$|S_n/n - x|\geq \delta$ のとき，$|f(S_n/n)-f(x)|\leq 2\|f\|_\infty$ が成り立つ．したがって
+
+\
+\end{proof}
+
 
 
 \section{無相関な確率変数列と分散}
