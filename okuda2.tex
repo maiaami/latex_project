@@ -249,8 +249,49 @@ $f$ を $[0,1]$ 上の連続関数とし，$f_n$ を
 が成り立つ。$\delta$は$x$に依存しないので，$x\in[0,1]$に対して一様に評価できる。
 よって，$n\to\infty$のとき，$\sup_{x\in[0,1]} |f_n(x) - f(x)| \to 0$が成り立つことが示された。
 
-
 \end{proof}
+
+
+\section{三角配列に対する弱法則と一般化}
+\begin{thm}[三角配列に対する弱法則]
+各 $n$ に対し，$X_{n,k}$，$1 \le k \le n$ は独立とする．$b_n > 0$，$b_n \to \infty$ をみたす $b_n$ に対して $\bar{X}_{n,k} = X_{n,k} 1_{(|X_{n,k}| \le b_n)}$ とおき，$n \to \infty$ のとき次が成り立つと仮定する．
+  \begin{enumerate}
+    \item[(i)] $\displaystyle \sum_{k=1}^n P(|X_{n,k}| > b_n) \to 0$
+    \item[(ii)] $\displaystyle b_n^{-2} \sum_{k=1}^n E(\bar{X}_{n,k}^2) \to 0$
+  \end{enumerate}
+このとき，$S_n = X_{n,1} + \cdots + X_{n,n}$ とし，$a_n = \sum_{k=1}^n E(\bar{X}_{n,k})$ とおくと，
+\[
+\frac{S_n - a_n}{b_n} \to 0
+\]
+が確率収束の意味で成り立つ．
+\end{thm}
+\begin{proof}
+  $\bar{S}_n = \bar{X}_{n,1} + \cdots + \bar{X}_{n,n}$ とおく．
+  $\frac{S_n - a_n}{b_n}$の収束について聞かれているから，これが$\varepsilon$以上になる確率を考えてみると，次のように評価できる．
+  \begin{align*}
+    P\left(\left|\frac{S_n - a_n}{b_n}\right| \ge \varepsilon\right)
+    &=P\left(\left|\frac{S_n - a_n}{b_n}\right| \ge \varepsilon, S_n = \bar{S}_n\right) + P\left(\left|\frac{S_n - a_n}{b_n}\right| \ge \varepsilon, S_n \neq \bar{S}_n\right)\\
+    &\le P(S_n \neq \bar{S}_n) + P\left(\left|\frac{\bar{S}_n - a_n}{b_n}\right| \ge \varepsilon\right)
+  \end{align*}
+  この第一項について，$S_n \neq \bar{S}_n$ となっていれば，少なくとも1つの $|X_{n,k}|$ が $b_n$ を上回り，$\bar{X}_{n,k} \neq X_{n,k}$となる（逆は必ずしも成立しない．例えば元の確率変数列のある要素$X_{n,k}$のみが$b_n>0$を上回った場合は$\bar{X}_{n,k}=0$より$\bar{S}_n$は$S_n$より小さくなるが，加えて別の確率変数$X_{n,j}$が$-b_n$を下回った場合は$\bar{X}_{n,j} = 0$となるので，$\bar{S}_n$は大きくなる．この差分が打ち消し合うことで偶然$S_n = \bar{S}_n$となる場合がある）．\\したがって，ボンフェロー二の不等式および仮定(i)より，次のように評価できる．
+  \[
+    P(S_n \neq \bar{S}_n) \leq P\left(\bigcup_{k=1}^n \{\bar{X}_{n,k} \neq X_{n,k}\}\right) \le \sum_{k=1}^n P(|X_{n,k}| > b_n) \to 0
+  \]
+  第2項について，チェビシェフの不等式を用いると，
+  \begin{align*}
+  P\left(\left|\frac{\bar{S}_n - a_n}{b_n}\right| \ge \varepsilon\right) 
+  &\le \frac{1}{\varepsilon^2} E\left[\left(\frac{\bar{S}_n - a_n}{b_n}\right)^2\right] = \frac{1}{\varepsilon^2 b_n^2} E\left[(\bar{S}_n - a_n)^2\right] = \frac{1}{\varepsilon^2 b_n^2} \mathrm{var}(\bar{S}_n)\\
+  &= \frac{1}{\varepsilon^2 b_n^2} \sum_{k=1}^n \mathrm{var}(\bar{X}_{n,k}) \le \frac{1}{\varepsilon^2 b_n^2} \sum_{k=1}^n E(\bar{X}_{n,k}^2) \to 0
+  \end{align*}
+  最後の不等式は，一般に$\mathrm{var}(X)=E(X^2) - (E(X))^2 \leq E(X^2)$となることを用いた．
+  よって第1項，第2項ともに $n \to \infty$ のとき $0$ に収束することが示されたので，結論として
+  \[
+    P\left(\left|\frac{S_n - a_n}{b_n}\right| \ge \varepsilon\right) \to 0
+  \]
+  が成り立つ．
+\end{proof}
+
+
 
 
 
