@@ -368,6 +368,44 @@ $g(x)=2xP(|X_1|>x)$とすると$0<g(x)<2x$であり，$x\to\infty$で$g(x)\to 0$
 \end{proof}
 
 \section{最も条件の緩い大数の弱法則}
+\begin{thm}
+$X_1,X_2\cdots$を$E(|X_i|)<\infty$であるi.i.d.とし，$S_n=X_1+\cdots+X_n$，$\mu=E(X_1)$とおく．\\このとき$n\to\infty$で
+\[
+S_n/n\xrightarrow{P}\mu
+\]
+\end{thm}
+\begin{proof}
+まず，チェビシェフの不等式から
+\[
+  xP(|X_1| > x) \le E\!\left(|X_1| 1_{(|X_1|>x)}\right)
+\]
+が成り立つ．この右辺が0に収束することを示したい．\\
+各 $\omega \in \Omega$ を固定すると，$E(|X_1|) < \infty$ より $|X_1(\omega)| < \infty$ がほとんど確実に ($\text{a.s.}$) 成り立つ．
+したがって，被積分関数を $f_x(\omega) = |X_1(\omega)| 1_{(|X_1(\omega)|>x)}$ とすると，$x \to \infty$ としたとき各点ごとにいつかは必ず $x$ が $|X_1(\omega)|$ を上回るため、
+\[
+  f_x(\omega) \to 0, \qquad x \to \infty \quad (\text{a.s.})
+\]
+となり，$f_x$が$0$にa.e.で収束する．
+ここで，任意の $x > 0$ に対して $|f_x(\omega)| \le |X_1(\omega)|$ であり，仮定より $|X_1|$ は可積分であるから，ルベーグの優収束定理が適用できる．したがって，
+\[
+  \lim_{x \to \infty} xP(|X_1| > x) \le \lim_{x \to \infty} E\!\left(|X_1| 1_{(|X_1|>x)}\right) = E\left(\lim_{x \to \infty} f_x\right) = 0
+\]
+となる．よって定理5.2から
+\[
+\frac{S_n}{n}-\mu_n\xrightarrow{P} 0
+\]
+
+次に，$\mu_n\coloneqq E(X_1 1_{(|X_1|\leq n)})$とすると，$\mu_n\to\mu$となることを示す．$g_n(\omega)\coloneq X_1(\omega) 1_{(|X_1(\omega)| \le n)}$とすると，各$\omega$について，$n\to\infty$としたときにどこかで必ず$n$が$|X_1(\omega)|$を上回るため，
+\[
+  g_n(\omega)\to X_1(\omega), \qquad n\to\infty \quad (\text{a.s.})
+\]
+となる．したがって
+\[
+  \lim_{n\to\infty}\mu_n=\lim_{n\to\infty} E(X_1 1_{(|X_1|\leq n)})=E(\lim_{n\to\infty}X_1 1_{(|X_1|\leq n)})=E(X_1)=\mu
+\]
+となる．ところで任意の$\varepsilon$について，
+\end{proof}
+
 
 
 
