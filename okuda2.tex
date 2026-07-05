@@ -321,7 +321,8 @@ $X_1, X_2, \dots$ を
 \end{thm}
 \begin{proof}
   
-三角配列に対する弱法則について$b_n = n$，$X_{n,k} = X_k$ とおいて考えてみればよい．条件(i)については，
+三角配列に対する弱法則について$b_n = n$，$X_{n,k} = X_k$ とおいて考えてみる．この場合，$a_n$に相当するのは$\sum_{k=1}^n E(\bar{X}_k)=n\mu_n$であるから，条件(i)(ii)が示せればよいことになる．\\
+条件(i)については，
 \[
 \sum_{k=1}^n P(|X_{n,k}| > b_n) = n P(|X_1| > n) \to 0
 \]
@@ -355,11 +356,19 @@ E(\bar{X}_{n,1}^2)=E(|\bar{X}_{n,1}|^2)=\int_{0}^{\infty}2xP(|\bar{X}_{n,1}|>x)d
 \end{align*}
 ここで，考えるべきなのは$n^{-1}\cdot E(\bar{X}_{n,1}^2) \to 0$であることを思い出すと，$n\to\infty$で
 \[
-\frac{E(\bar{X}_{n,1}^2)}{n}\le \frac{1}{n}\int_{0}^{n}2xP(|X_1|)dx\to\infty
+\frac{E(\bar{X}_{n,1}^2)}{n}\le \frac{1}{n}\int_{0}^{n}2xP(|X_1|>x)dx\to\infty
 \]
 となることを示せれば良い。
+$g(x)=2xP(|X_1|>x)$とすると$0<g(x)<2x$であり，$x\to\infty$で$g(x)\to 0$である．したがって，$\sup(g(x))<\infty$である．$g_n(x)=g(nx)$とおくと，$g_n$は有界で$g_n(x)\xrightarrow[n\to\infty]{} 0$だから，有界収束定理が適用でき，
+\[
+\lim_{n\to\infty}\frac{1}{n}\int_{0}^{n}2xP(|X_1|>x)dx=\lim_{n\to\infty}\int_{0}^{1}g_n(x)dx=\int_{0}^{1}\lim_{n\to\infty}g_n(x)dx=0
+\]
+以上で条件(ii)も成立していることを確かめられたので，定理5.2が示された.
 
 \end{proof}
+
+\section{最も条件の緩い大数の弱法則}
+
 
 
 \section{無相関な確率変数列と分散}
