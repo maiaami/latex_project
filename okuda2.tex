@@ -401,9 +401,16 @@ S_n/n\xrightarrow{P}\mu
 \]
 となる．したがって
 \[
-  \lim_{n\to\infty}\mu_n=\lim_{n\to\infty} E(X_1 1_{(|X_1|\leq n)})=E(\lim_{n\to\infty}X_1 1_{(|X_1|\leq n)})=E(X_1)=\mu
+  \lim_{n\to\infty}\mu_n=\lim_{n\to\infty} E\left(X_1 1_{(|X_1|\leq n)}\right)=E\left(\lim_{n\to\infty}X_1 1_{(|X_1|\leq n)}\right)=E(X_1)=\mu
 \]
-となる．ところで任意の$\varepsilon$について，
+となる．ところで，任意の$\varepsilon$について
+\begin{align*}
+P\left(\left|\frac{S_n}{n}-\mu\right|>\varepsilon \right)\le P\left(\left|\frac{S_n}{n}-\mu_n\right|+\left|\mu_n-\mu\right|>\varepsilon\right)
+\end{align*}
+$\mu_n\xrightarrow[n\to\infty]\mu$であるから，任意の$\varepsilon_1$についてある$n$以降で$|\mu_n-\mu|<\varepsilon_1$とすることができる．したがって，このときは
+\begin{align*}
+P\left(\left|\frac{S_n}{n}-\mu_n\right|+\left|\mu_n-\mu\right|>\varepsilon\right)\le P\left(\left|\frac{S_n}{n}-\mu_n\right|>\varepsilon-\varepsilon_1\right)
+\end{align*}
 \end{proof}
 
 
