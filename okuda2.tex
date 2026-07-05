@@ -348,15 +348,16 @@ $X_1, X_2, \dots$ を
 \[
 E(\bar{X}_{n,1}^2)=E(|\bar{X}_{n,1}|^2)=\int_{0}^{\infty}2xP(|\bar{X}_{n,1}|>x)dx
 \]
-ここで，条件(i)を用いるために$P(|\bar{X}_{n,1}|>x)$をバー無しの$|X_{n,1}|$を用いて評価したい。$\bar{X}_{n,k} = X_{n,k} 1_{(|X_{n,k}| \le n)}$だったので，$P(|\bar{X}_{n,1}|>x)$は，$x\ge n$ならば$0$になるし，$x\le n$ならば$P(|X_{n,1}|>x)-P(|X_{n,1}|>n)$に等しい。したがって
+ここで，条件(i)を用いるために$P(|\bar{X}_{n,1}|>x)$をバー無しの$|X_{n,1}|$を用いて評価したい。$\bar{X}_{n,k} = X_{n,k} 1_{(|X_{n,k}| \le n)}$だったので，$P(|\bar{X}_{n,1}|>x)$は，$x\ge n$ならば$0$になるし，$x\le n$ならば$P(|X_{n,1}|>x)-P(|X_{n,1}|>n)$に等しい（すなわちこの第1項で上から抑えられる）。したがって
 \begin{align*}
-\int_{0}^{\infty}2xP(|\bar{X}_{n,1}|>x)dx &= \int{0}^{n}2xP(|\bar{X}_{n,1}|>x)dx+\int{n}^{\infty}2xP(|\bar{X}_{n,1}|>x)dx\\
-&\le \int_{0}^{n}2xP(|X_{n,1})
+\int_{0}^{\infty}2xP(|\bar{X}_{n,1}|>x)dx &= \int_{0}^{n}2xP(|\bar{X}_{n,1}|>x)dx+\int_{n}^{\infty}2xP(|\bar{X}_{n,1}|>x)dx\\
+&\le \int_{0}^{n}2xP(|X_{n,1}|>x)dx=\int_{0}^{n}2xP(|X_1|>x)dx
 \end{align*}
-
-右辺の積分の中身に現れる$xP(|\bar{X}_{n,1}|)>x$は条件から$x\to\infty$で$0$に収束する。しかし，その積分が収束することはそれほど自明でははない。
-
-
+ここで，考えるべきなのは$n^{-1}\cdot E(\bar{X}_{n,1}^2) \to 0$であることを思い出すと，$n\to\infty$で
+\[
+\frac{E(\bar{X}_{n,1}^2)}{n}\le \frac{1}{n}\int_{0}^{n}2xP(|X_1|)dx\to\infty
+\]
+となることを示せれば良い。
 
 \end{proof}
 
