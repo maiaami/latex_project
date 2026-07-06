@@ -418,39 +418,8 @@ P\left(\left|\frac{S_n}{n}-\mu\right| >\varepsilon\right)&\le P\left(\left|\frac
 \end{align*}
 \end{proof}
 
-
-
-
-
-
-\section{無相関な確率変数列と分散}
-
-\begin{thm}
-$E(X_i^2) < \infty$ である確率変数列 $X_1,\dots,X_n$ が無相関であれば，
-\[
-  \mathrm{var}(X_1 + \cdots + X_n) = \mathrm{var}(X_1) + \cdots + \mathrm{var}(X_n)
-\]
-が成り立つ．
-\end{thm}
-
-\begin{proof}
-$\mu_i = E(X_i)$，$S_n = \sum_{i=1}^n X_i$ とおく．$E(S_n) = \sum_{i=1}^n \mu_i$ だから，分散の定義を用い，和の2乗を積の形で書いて展開すると，
-\begin{align*}
-  \mathrm{var}(S_n)
-  &= E\!\left((S_n - E(S_n))^2\right)
-   = E\!\left(\left\{\sum_{i=1}^n (X_i - \mu_i)\right\}^2\right) \\
-  &= E\!\left(\sum_{i=1}^n \sum_{j=1}^n (X_i - \mu_i)(X_j - \mu_j)\right) \\
-  &= \sum_{i=1}^n E\!\left((X_i - \mu_i)^2\right) + 2\sum_{i=1}^n \sum_{j=1}^{i-1} E\!\left((X_i - \mu_i)(X_j - \mu_j)\right)
-\end{align*}
-となる．ただし，最後の等式では対角の項 $i=j$ を分け，$1 \le i < j \le n$ に関する和と $1 \le j < i \le n$ に関する和が等しいことを用いた．
-この第2項を展開すると，$X_i$ と $X_j$ が無相関であることから，次のようになる
-\[
-  E\!\left((X_i - \mu_i)(X_j - \mu_j)\right)
-  = E(X_iX_j) - \mu_i E(X_j) - \mu_j E(X_i) + \mu_i\mu_j
-  = E(X_iX_j) - \mu_i\mu_j = 0
-\]
-\end{proof}
-
+\section{今後の展望}
+本レポートでは、期待値の存在のみを仮定した独立同分布な確率変数列に対して、大数の弱法則、すなわち標本平均が期待値に確率収束することを示した。この定理は分散が有限であることを過程してしまえば簡単に導けるため，確率論の教科書などでは最初のほうに紹介される．そのため，条件をさらに緩めて行って，最終的には可積分でさえあれば成立するという一連の流れは非常に興味深かった．私の今後の展望としては，この収束をより強い概念である「ほとんど確実収束（$a.s.$ 収束）」へと強化した$\textbf{大数の強法則（Strong Law of Large Numbers）}$の証明とその条件の精査を行いたい。また，その後には確率論の中心的な定理である中心極限定理について，特性関数をはじめとした周辺知識とともに細部まで学ぶ予定である．中心極限定理の証明の仕方や周辺の話題は様々あり，それらを網羅的に学ぶことで確率論の根源的な理解をさらに高めていきたい．中でも私が特に興味を惹かれているのは，統計物理学や場の量子論で発展した\textbf{「くりこみ群（Renormalization Group: RG）」}のアプローチである．
 
 
 
