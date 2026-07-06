@@ -367,7 +367,7 @@ $g(x)=2xP(|X_1|>x)$とすると$0<g(x)<2x$であり，$x\to\infty$で$g(x)\to 0$
 
 \end{proof}
 
-\section{最も条件の緩い大数の弱法則}
+\section{$E(|X|)<\infty$のみでの大数の弱法則}
 \begin{thm}
 $X_1,X_2\cdots$を$E(|X_i|)<\infty$であるi.i.d.とし，$S_n=X_1+\cdots+X_n$，$\mu=E(X_1)$とおく．\\このとき$n\to\infty$で
 \[
@@ -407,11 +407,18 @@ S_n/n\xrightarrow{P}\mu
 \begin{align*}
 P\left(\left|\frac{S_n}{n}-\mu\right|>\varepsilon \right)\le P\left(\left|\frac{S_n}{n}-\mu_n\right|+\left|\mu_n-\mu\right|>\varepsilon\right)
 \end{align*}
-$\mu_n\xrightarrow[n\to\infty]\mu$であるから，任意の$\varepsilon_1$についてある$n$以降で$|\mu_n-\mu|<\varepsilon_1$とすることができる．したがって，このときは
+であるが，$\mu_n\xrightarrow[n\to\infty]{}\mu$であるから任意の$\varepsilon_1$についてある$n_1$以降で$|\mu_n-\mu|<\varepsilon_1$とすることができる．したがって，$n\ge n_1$のときには
 \begin{align*}
-P\left(\left|\frac{S_n}{n}-\mu_n\right|+\left|\mu_n-\mu\right|>\varepsilon\right)\le P\left(\left|\frac{S_n}{n}-\mu_n\right|>\varepsilon-\varepsilon_1\right)
+\left|\frac{S_n}{n}-\mu_n\right|+\left|\mu_n-\mu\right|>\varepsilon \implies \left|\frac{S_n}{n}-\mu_n\right|>\varepsilon-\varepsilon_1
+\end{align*}
+したがって
+\begin{align*}
+P\left(\left|\frac{S_n}{n}-\mu\right| >\varepsilon\right)&\le P\left(\left|\frac{S_n}{n}-\mu_n\right|+\left|\mu_n-\mu\right|>\varepsilon\right)\\
+&\le P\left(\left|\frac{S_n}{n} \mu_n\right|>\varepsilon-\varepsilon_1\right)\longrightarrow 0 \quad (n\to\infty)
 \end{align*}
 \end{proof}
+
+
 
 
 
