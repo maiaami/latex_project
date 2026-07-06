@@ -249,11 +249,11 @@ $f$ を $[0,1]$ 上の連続関数とし，$f_n$ を
   \[
     E\!\left[f\!\left(\frac{S_n}{n}\right)\right] = \sum_{m=0}^n P(S_n = m) f\!\left(\frac{m}{n}\right) = \sum_{m=0}^n \binom{n}{m} x^m (1-x)^{n-m} f\!\left(\frac{m}{n}\right) = f_n(x)
   \]
-  ということになる。これを用いると
+  ということになる．これを用いると
   \[
     |f_n(x) - f(x)|=\left|E\!\left[f\!\left(\frac{S_n}{n}\right)\right] - f(x)\right|\leq E\!\left[\left|f\!\left(\frac{S_n}{n}\right) - f(x)\right|\right]
   \]
-  となる。ところで，$f$ は 連続関数であるから，閉区間$[0,1]$ 上で一様連続である．よって任意の $\varepsilon>0$ に対して，ある $\delta>0$ が存在して，$|x-y|<\delta$ ならば $|f(x)-f(y)|<\varepsilon$ が成り立つ．
+  となる．ところで，$f$ は 連続関数であるから，閉区間$[0,1]$ 上で一様連続である．よって任意の $\varepsilon>0$ に対して，ある $\delta>0$ が存在して，$|x-y|<\delta$ ならば $|f(x)-f(y)|<\varepsilon$ が成り立つ．
   一方，$M=\sup_{x\in[0,1]}|f(x)|$とおけば，$|S_n/n - x|\geq \delta$ のとき，$|f(S_n/n)-f(x)|\leq 2M$ が成り立つ．
   したがって，次のように分けて評価できる：
   \begin{align*}
@@ -261,13 +261,13 @@ $f$ を $[0,1]$ 上の連続関数とし，$f_n$ を
     &= E\left[ \left| f\left(\frac{S_n}{n}\right) - f(x) \right| \boldsymbol{1}_{\{|S_n/n - x| < \delta\}} \right] + E\left[ \left| f\left(\frac{S_n}{n}\right) - f(x) \right| \boldsymbol{1}_{\{|S_n/n - x| \geq \delta\}} \right] \\
     &\leq \varepsilon+ 2M P\left( \left| \frac{S_n}{n} - x \right| \geq \delta \right)
   \end{align*}
-  となる。
-  ところで，$S_n$は確率変数$X_1,\dots,X_n$の和であり，$E(X_i)=x$，$\mathrm{var}(X_i)=x(1-x)\leq 1/4$で有限であることから，$L_2$弱収束を用いることができて，$S_n/n$は$x$に確率収束する。つまり，$n\to\infty$のとき，$P(|S_n/n - x| \geq \delta) \to 0$が成り立つ。したがって，十分大きな$n$に対して
+  となる．
+  ところで，$S_n$は確率変数$X_1,\dots,X_n$の和であり，$E(X_i)=x$，$\mathrm{var}(X_i)=x(1-x)\leq 1/4$で有限であることから，$L_2$弱収束を用いることができて，$S_n/n$は$x$に確率収束する．つまり，$n\to\infty$のとき，$P(|S_n/n - x| \geq \delta) \to 0$が成り立つ．したがって，十分大きな$n$に対して
 \[
   E\left[ \left| f\left(\frac{S_n}{n}\right) - f(x) \right| \right] < \varepsilon
 \]
-が成り立つ。$\delta$は$x$に依存しないので，$x\in[0,1]$に対して一様に評価できる。
-よって，$n\to\infty$のとき，$\sup_{x\in[0,1]} |f_n(x) - f(x)| \to 0$が成り立つことが示された。
+が成り立つ．$\delta$は$x$に依存しないので，$x\in[0,1]$に対して一様に評価できる．
+よって，$n\to\infty$のとき，$\sup_{x\in[0,1]} |f_n(x) - f(x)| \to 0$が成り立つことが示された．
 
 \end{proof}
 
@@ -349,7 +349,7 @@ $X_1, X_2, \dots$ を
 \[
 E(\bar{X}_{n,1}^2)=E(|\bar{X}_{n,1}|^2)=\int_{0}^{\infty}2xP(|\bar{X}_{n,1}|>x)dx
 \]
-ここで，条件(i)を用いるために$P(|\bar{X}_{n,1}|>x)$をバー無しの$|X_{n,1}|$を用いて評価したい。$\bar{X}_{n,k} = X_{n,k} 1_{(|X_{n,k}| \le n)}$だったので，$P(|\bar{X}_{n,1}|>x)$は，$x\ge n$ならば$0$になるし，$x\le n$ならば$P(|X_{n,1}|>x)-P(|X_{n,1}|>n)$に等しい（すなわちこの第1項で上から抑えられる）。したがって
+ここで，条件(i)を用いるために$P(|\bar{X}_{n,1}|>x)$をバー無しの$|X_{n,1}|$を用いて評価したい．$\bar{X}_{n,k} = X_{n,k} 1_{(|X_{n,k}| \le n)}$だったので，$P(|\bar{X}_{n,1}|>x)$は，$x\ge n$ならば$0$になるし，$x\le n$ならば$P(|X_{n,1}|>x)-P(|X_{n,1}|>n)$に等しい（すなわちこの第1項で上から抑えられる）．したがって
 \begin{align*}
 \int_{0}^{\infty}2xP(|\bar{X}_{n,1}|>x)dx &= \int_{0}^{n}2xP(|\bar{X}_{n,1}|>x)dx+\int_{n}^{\infty}2xP(|\bar{X}_{n,1}|>x)dx\\
 &\le \int_{0}^{n}2xP(|X_{n,1}|>x)dx=\int_{0}^{n}2xP(|X_1|>x)dx
@@ -358,7 +358,7 @@ E(\bar{X}_{n,1}^2)=E(|\bar{X}_{n,1}|^2)=\int_{0}^{\infty}2xP(|\bar{X}_{n,1}|>x)d
 \[
 \frac{E(\bar{X}_{n,1}^2)}{n}\le \frac{1}{n}\int_{0}^{n}2xP(|X_1|>x)dx\to\infty
 \]
-となることを示せれば良い。
+となることを示せれば良い．
 $g(x)=2xP(|X_1|>x)$とすると$0<g(x)<2x$であり，$x\to\infty$で$g(x)\to 0$である．したがって，$\sup(g(x))<\infty$である．$g_n(x)=g(nx)$とおくと，$g_n$は有界で$g_n(x)\xrightarrow[n\to\infty]{} 0$だから，有界収束定理が適用でき，
 \[
 \lim_{n\to\infty}\frac{1}{n}\int_{0}^{n}2xP(|X_1|>x)dx=\lim_{n\to\infty}\int_{0}^{1}g_n(x)dx=\int_{0}^{1}\lim_{n\to\infty}g_n(x)dx=0
@@ -381,7 +381,7 @@ S_n/n\xrightarrow{P}\mu
 \]
 が成り立つ．この右辺が0に収束することを示したい．\\
 各 $\omega \in \Omega$ を固定すると，$E(|X_1|) < \infty$ より $|X_1(\omega)| < \infty$ がほとんど確実に ($\text{a.s.}$) 成り立つ．
-したがって，被積分関数を $f_x(\omega) = |X_1(\omega)| 1_{(|X_1(\omega)|>x)}$ とすると，$x \to \infty$ としたとき各点ごとにいつかは必ず $x$ が $|X_1(\omega)|$ を上回るため、
+したがって，被積分関数を $f_x(\omega) = |X_1(\omega)| 1_{(|X_1(\omega)|>x)}$ とすると，$x \to \infty$ としたとき各点ごとにいつかは必ず $x$ が $|X_1(\omega)|$ を上回るため，
 \[
   f_x(\omega) \to 0, \qquad x \to \infty \quad (\text{a.s.})
 \]
@@ -419,7 +419,7 @@ P\left(\left|\frac{S_n}{n}-\mu\right| >\varepsilon\right)&\le P\left(\left|\frac
 \end{proof}
 
 \section{今後の展望}
-本レポートでは、期待値の存在のみを仮定した独立同分布な確率変数列に対して、大数の弱法則、すなわち標本平均が期待値に確率収束することを示した。この定理は分散が有限であることを仮定してしまえば簡単に導けるため，確率論の教科書などでは最初のほうに紹介される．しかし，条件をさらに緩めていくことで最終的には可積分性のみによって証明できるというのは非常に興味深かった．今後の展望としては，この収束をより強い概念である「ほとんど確実収束（$a.s.$ 収束）」へと強化した$\textbf{大数の強法則（Strong Law of Large Numbers）}$の証明とその条件の精査を行いたい。その後には確率論の中心的な定理である中心極限定理について，特性関数をはじめとした周辺知識とともに細部まで学ぶ予定である．中心極限定理の証明の仕方や周辺の話題は様々あり，それらを網羅的に学ぶことで確率論の根源的な理解をさらに高めていきたい．中でも私が特に興味を惹かれているのは，\cite{koralov2007}や\cite{ott2023note}で紹介されている，統計物理学や場の量子論で発展した概念である\textbf{「くりこみ群（Renormalization Group: RG）」}によるアプローチである．
+本レポートでは，期待値の存在のみを仮定した独立同分布な確率変数列に対して，大数の弱法則，すなわち標本平均が期待値に確率収束することを示した．この定理は分散が有限であることを仮定してしまえば簡単に導けるため，確率論の教科書などでは最初のほうに紹介される．しかし，条件をさらに緩めていくことで最終的には可積分性のみによって証明できるというのは非常に興味深かった．今後の展望としては，この収束をより強い概念である「ほとんど確実収束（$a.s.$ 収束）」へと強化した$\textbf{大数の強法則（Strong Law of Large Numbers）}$の証明とその条件の精査を行いたい．その後には確率論の中心的な定理である中心極限定理について，特性関数をはじめとした周辺知識とともに細部まで学ぶ予定である．中心極限定理の証明の仕方や周辺の話題は様々あり，それらを網羅的に学ぶことで確率論の根源的な理解をさらに高めていきたい．中でも私が特に興味を惹かれているのは，Koralov, Sinai\cite{koralov2007}やOtt\cite{ott2023note}が紹介している，統計物理学や場の量子論で発展した概念である\textbf{「くりこみ群（Renormalization Group: RG）」}によるアプローチである．
 
 \begin{thebibliography}{9}
 

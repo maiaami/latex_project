@@ -1,0 +1,72 @@
+\documentclass[dvipdfmx]{jsarticle}
+\usepackage[margin=1cm]{geometry}
+\usepackage{amsmath}
+
+\begin{document}
+
+\fboxsep0pt
+\fbox{%
+\begin{minipage}[t][17.5cm][t]{17.5cm}
+\vspace{0.5cm}
+\hspace{0.5cm}%
+\begin{minipage}{16.5cm}
+
+本レポートは，確率論における基本的な極限定理である「大数の弱法則（Weak Law of Large Numbers）」を，
+最も条件の緩い形（$E(|X_i|)<\infty$ のみを仮定する形）まで段階的に一般化しながら示すことを目的とする．
+ 
+\smallskip
+\noindent
+まず，独立同分布（i.i.d.）な確率変数列 $X_1, X_2, \dots$ の標本平均
+$\bar X_n = (X_1+\cdots+X_n)/n$ が母平均 $\mu = E(X_i)$ に「確率収束」するとはどういうことかを定義した上で，
+最終目標であるゴール（期待値の存在のみを仮定した弱法則）を提示する．
+ 
+\smallskip
+\noindent
+\textbf{第一段階（$L^2$弱法則）：}
+まず扱いやすい設定として，分散が有限（$\mathrm{var}(X_i)\le C<\infty$）な無相関確率変数列を考える．
+証明の中心的な道具として\textbf{チェビシェフの不等式}を一般化した形で導入し，これを用いて
+$S_n/n=(X_1+\cdots+X_n)/n$ が $\mu$ に2次平均収束（$L^2$収束）し，
+したがって確率収束もすることを示す．無相関性から分散の加法性が成り立つことを用い，
+$\mathrm{var}(S_n/n)\le C/n \to 0$ という評価が鍵となる．
+ 
+\smallskip
+\noindent
+\textbf{応用例：}
+この $L^2$弱法則の応用として，$[0,1]$上の連続関数 $f$ に対する
+\textbf{Bernstein多項式} $f_n$ が $n\to\infty$ で $f$ に一様収束することを，
+二項分布に従う確率変数の期待値として $f_n(x)=E[f(S_n/n)]$ と表し，
+一様連続性と弱法則を組み合わせて証明する．
+ 
+\smallskip
+\noindent
+\textbf{第二段階（三角配列への拡張）：}
+次に，各 $n$ ごとに独立な確率変数の列（三角配列）$X_{n,k}$ に対し，
+打ち切り確率変数 $\bar X_{n,k}=X_{n,k}\mathbf 1_{\{|X_{n,k}|\le b_n\}}$ を用いた一般的な弱法則を証明する．
+打ち切り誤差の評価とチェビシェフの不等式を組み合わせ，2つの条件（打ち切り確率の総和が0に収束すること，
+打ち切り2次モーメントの総和を $b_n^2$ で割ったものが0に収束すること）の下で
+$(S_n-a_n)/b_n \to 0$（確率収束）を示す．これを i.i.d.\ かつ $xP(|X_i|\ge x)\to 0$ をみたす列に適用し，
+$S_n/n-\mu_n \to 0$（$\mu_n = E(X_1\mathbf 1_{\{|X_1|\le n\}})$）を導く．
+ 
+\smallskip
+\noindent
+\textbf{最終段階（$E(|X_i|)<\infty$ のみでの弱法則）：}
+最後に，可積分性 $E(|X_i|)<\infty$ のみを仮定し，優収束定理を用いて
+$xP(|X_1|>x)\to 0$ および $\mu_n\to\mu$（$n\to\infty$）を示す．
+これらと前段の一般化された弱法則を合わせると，最終的に
+\[
+  \frac{S_n}{n} \xrightarrow{\ P\ } \mu \qquad (n\to\infty)
+\]
+という，期待値の存在のみを仮定した大数の弱法則が得られる．
+ 
+\smallskip
+\noindent
+\textbf{今後の展望：}
+本レポートの結論を踏まえ，今後は確率収束より強い概念である「ほとんど確実収束」に基づく
+\textbf{大数の強法則}の証明，および特性関数を用いた\textbf{中心極限定理}の学習を進める予定である．
+特に，統計物理学・場の量子論に由来する「くりこみ群」的アプローチによる理解にも関心を持っている．
+
+\end{minipage}
+\end{minipage}%
+}
+
+\end{document}
